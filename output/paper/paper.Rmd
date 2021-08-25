@@ -1,0 +1,95 @@
+---
+output: 
+  bookdown::pdf_document2:
+    citation_package: natbib
+    keep_tex: false
+    toc: false
+    fig_caption: true
+    latex_engine: xelatex
+    template: templates/svm-latex-ms.tex
+bibliography: "references.bib"
+header-includes:
+  -  \usepackage{hyperref}
+  -  \usepackage{amsmath}
+biblio-style: apalike
+title: "Explaining Sexism or Racism with GPT-3 (temp)"
+thanks: "Code and data are available at: https://github.com/kelichiu/GPT3-sexist-racist-content-explanation. We gratefully acknowledge the support of Gillian Hadfield and the Schwartz Reisman Institute for Technology and Society. We thank Amy Farrow, Haoluan Chen, Mauricio Vargas Sepúlveda, and Tom Davidson for helpful suggestions. Comments on the `r format(Sys.time(), '%d %B %Y')` version of this paper are welcome at: rohan.alexander@utoronto.ca."
+author:
+- name: Ke-Li Chiu
+  affiliation: University of Toronto
+- name: Rohan Alexander
+  affiliation: University of Toronto and Schwartz Reisman Institute
+abstract: "abstract..."
+keywords: "GPT-3; natural language processing; quantitative analysis; hate speech."
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+geometry: margin=1in
+fontfamily: mathpazo
+fontsize: 12pt
+endnote: no
+graphics: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction
+
+To read and digest: Trust is a primary reason for acceptance. Trust is crucial in all kinds of relationships, such as human-social interactions, seller-buyer relationships, and relationships among members of a virtual team. Trust can also define the way people interact with technology [@siau2018building].
+
+To read and digest: This is often how trust appears to work: it involves a (more or less elaborate) explanation of the person or thing that we may or may not trust. Such explanations  we  may  simply  accept,  or  we  may  base  our decisions  upon  them.  If  you  have  given  me  satisfactory explanations in the past, I may even refrain from requesting them in the future [@pieters2011explanation].
+
+**Stress on that this is not Explainable AI. Why it's not Explainable AI? What overlapped with Explainable AI?**
+
+# Background
+
+## Previous paper
+
+## Sharon et al. paper
+
+## GPT-3
+
+GPT-3 is groundbreaking for a few reasons. First of all, GPT-3 are not specialized in one or just a few tasks; it can generally do anything you want it to do. Second, it learns like human do; you just show it a few examples, and it will pick up the patterns in your example, and produce the results you want. Third, the examples and instructions you feed to the model are expressed in natural language. In other words, you are programming with plain language without writing any code. Finally, the model generates the text very quickly and very fluently, and the text contents are hard to be distinguished from human creation. We will see more examples now.
+
+
+# Methods
+
+## Dataset: Ethos Hate Speech Dataset
+Two formats: open-ended and structured. 
+
+Because GPT-3’s responses can be very different each time, we prompt GPT-3 five times for each example to help us examine the variety of the responses and also increase the chance of getting a reasonable response.
+
+Structured: We come up with a set of attributes such as targets, the presence of violence, derogatory, and profanity. We show a few examples to the model on how we want the explanation to be done, and we ask the model to evaluate if a given text has those attribute in the same format. 
+
+Seven attributes: target, targeting type, derogatory, profanity, obscenity, violence, rejection, and accusation. 
+Offensive language 
+
+Violence: inciting violence towards the target. Mentioning violence from other event does not count. 
+Rejection: explicit expression of not wanting the presence or existence of a target. 
+Accusation: accusing the target of misconducts of mischievous behaviours.  
+
+Unclear target or targeting type is not included.
+Supremacy is not included.
+
+# Results
+
+# Discussion
+
+## Variety of open-ended explanation
+
+**Example below**
+Because GPT-3’s responses can be very different each time, we prompt GPT-3 five times for each example to help us examine the variety of the responses and also increase the chance of getting a reasonable response. Output 1 “it is a generalization about women’s sports, saying that they are a joke. Generalizations are usually untrue and therefore the text is sexist”. This output mentions “generalization”, which is what the statement is but not so adequate, if you said “men are taller than women”, that’s a generalization as well but you wouldn’t think that’s a sexist comment. In output 2 is a straight no, explaining why you say women sport is a joke doesn’t make it not sexist. Output 3 on the other hand is spot on, it focus on the word “joke”, and explain that joke has a connotation of something that is not serious. Output 4 did a good job as well, like output 3 it also points out the implication of women sports are less than men sports. Output 5, the first part is okay as it mentioned discrimination, but the latter part just seems like a glitch. 
+
+Open-ended explanations can be diverse and hard to control.
+
+
+## Structured: beyond sexisma and racism
+
+This approach actually permits the model to detect problematic texts beyond the scope of sexism and racism, because now, the targets can be of any groups identified based on not only gender and race, but also religion, sexual orientation, and disability. 
+
+## Not Explainable AI
+
+Explainable AI is an approach that’s been very popular to tackle the black box problem in AI decision making. Often times, we have hard time to understand why AI makes the decision it makes, and there’s no way to deconstruct it. Explainable AI is the approach of that decision making process auditable and transparent. Why we do is not explainable AI because the explanations on why a text passage is sexist or racist provided by GPT-3 are from a social lense, and are not shedding a light on any technical or system process for the output. In other words, the explanations displayed are not the rationale GPT-3 made the decisions based on. GPT-3 is saying that the text is sexist or racist because of the math behind the model, not because of the explanations it generated. 
+
+
+# References
