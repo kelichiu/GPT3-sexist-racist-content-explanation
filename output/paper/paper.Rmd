@@ -30,7 +30,11 @@ graphics: yes
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(tidy.opts=list(width.cutoff=80), echo = FALSE, warning = FALSE)
+library(dplyr)
+library(tidyverse)
+library(tidyr)
+library(readr)
 ```
 
 # Introduction
@@ -61,7 +65,7 @@ Because GPT-3’s responses can be very different each time, we prompt GPT-3 fiv
 
 Structured: We come up with a set of attributes such as targets, the presence of violence, derogatory, and profanity. We show a few examples to the model on how we want the explanation to be done, and we ask the model to evaluate if a given text has those attribute in the same format. 
 
-Seven attributes: target, targeting type, derogatory, profanity, obscenity, violence, rejection, and accusation. 
+Eight attributes: target, targeting type, derogatory, profanity, obscenity, violence, rejection, and accusation. 
 Offensive language 
 
 Violence: inciting violence towards the target. Mentioning violence from other event does not count. 
@@ -71,7 +75,60 @@ Accusation: accusing the target of misconducts of mischievous behaviours.
 Unclear target or targeting type is not included.
 Supremacy is not included.
 
+## Open-Ended Prompts
+
+Prompt:
+
+> Q: Is the following text in quotes sexist? Answer yes or no and explain why.
+>
+> '''If men shouldnt hit women because we are physically stronnger... then women shouldnt talk because they are fucking louder.'''
+>
+> A: 
+
+GPT-3 response: 
+
+> Yes this is sexist. This statement is using the stereotypical gender roles of men and women to justify why it is ok for men to hit women but it is not ok for women to speak. Men are seen as physically stronger and women are seen as the loud, screeching sex. This is a perfect example of the sexism in our society.
+
+## Structured Prompts
+
+### Eight Attributes
+
+> '''What about a global massacre of men? Pussiezzz only girls'''
+>
+> [target: men | targeting type: gender| violence: yes | insult: yes | rejection: no | accusation: no]
+>
+> '''kill all the african american monkeys'''
+>
+> [target: african american | targeting type: race| violence: yes | insult: yes | rejection: no | accusation: no]
+>
+> '''Women are made for making babies and cooking dinner and nothing else!!!'''
+>
+> [target: women | targeting type: gender| violence: no | insult: yes | rejection: no | accusation: no]
+>
+> '''The world would be better without white people because they stole from the black Egyptians in the before christ ages they was poor we wasnt whites  ruins everything for black people/White people have pig dicks and no shape no hips or no booty they have to get plastic surgery as us blacks get it from our mother whites brought skin cancer to america so learn some facts before you try to run us out america when we was here before yall racist ass smelly crackers and dont say you will beat my ass because you cant and if you wanna find out drop your adress‚'''
+>
+> [target: white | targeting type: race| violence: yes | insult: yes| rejection: yes | accusation: yes]
+>
+> '''You should know women's sports are a joke'''
+>
+> [
+
+GPT-3 response: 
+
+> target: women's sports | targeting type: gender| violence: no | derogatory: yes | profanity: no | obscenities: no | rejection: no | accusation: no
+
 # Results
+
+## Open-Ended Responses
+
+```{r}
+open_ended_results_raw <- read.csv(here::here("output/data/open-ended/open_ended_results_with_human_label.csv"))
+open_ended_results_raw
+```
+
+## Structured Responses
+```{r}
+```
 
 # Discussion
 
