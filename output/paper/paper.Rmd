@@ -121,9 +121,72 @@ GPT-3 response:
 
 ## Open-Ended Responses
 
-```{r}
+### Binary results
+```{r binaryresult}
 open_ended_results_raw <- read.csv(here::here("output/data/open-ended/open_ended_results_with_human_label.csv"))
-open_ended_results_raw
+open_ended_results_binary_match_agg <- open_ended_results_raw %>%
+  select(binary_match) %>%
+  group_by(binary_match) %>% 
+       mutate(count = n()) %>% 
+       slice(1) 
+open_ended_results_binary_match_agg
+```
+```{r binaryresultagg}
+open_ended_results_binary_match <- open_ended_results_raw %>% 
+  select(binary_match, comment) %>% 
+  group_by(comment, binary_match) %>% 
+       mutate(count = n()) %>% 
+       slice(1) %>% 
+       mutate(majority_correct = case_when(
+                                binary_match == 0 & count > 2 ~ 0, 
+                                binary_match == 0 & count < 3 ~ 1,
+                                binary_match == 1 & count > 2 ~ 1, 
+                                binary_match == 1 & count < 3 ~ 0)
+              ) %>% 
+       subset(select = -c(binary_match, count))%>% 
+       unique()%>% 
+       subset(select = -c(comment))%>% 
+       group_by(majority_correct)%>% 
+       mutate(count = n()) %>% 
+       slice(1) 
+
+open_ended_results_binary_match
+```
+
+### Reasoning Adequacy
+
+```{r binaryresultagg}
+open_ended_results_reason <- open_ended_results_raw %>%
+  filter(binary_match == 1) %>%
+  group_by(reasoning) %>%
+  mutate(count = n()) %>% 
+  slice(1) %>% 
+  select(reasoning, count)
+open_ended_results_reason
+  
+```
+### Target Identification
+
+```{r binaryresultagg}
+open_ended_results_targetID <- open_ended_results_raw %>%
+  filter(binary_match == 1) %>%
+  group_by(identify_target) %>%
+  mutate(count = n()) %>% 
+  slice(1) %>% 
+  select(identify_target, count)
+open_ended_results_targetID
+```
+
+### Made-up Details in Responses
+
+```{r binaryresultagg}
+open_ended_results_madeup_details <- open_ended_results_raw %>%
+  filter(binary_match == 1) %>%
+  group_by(madeup_details) %>%
+  mutate(count = n()) %>% 
+  slice(1) %>% 
+  select(madeup_details, count)
+open_ended_results_madeup_details
 ```
 
 ## Structured Responses
