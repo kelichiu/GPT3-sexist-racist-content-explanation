@@ -58,6 +58,8 @@ GPT-3 is groundbreaking for a few reasons. First of all, GPT-3 are not specializ
 
 # Methods
 
+1 annotator
+
 ## Dataset: Ethos Hate Speech Dataset
 Two formats: open-ended and structured. 
 
@@ -122,8 +124,9 @@ GPT-3 response:
 ## Open-Ended Responses
 
 ### Binary results
+
 ```{r binaryresult}
-open_ended_results_raw <- read.csv(here::here("output/data/open-ended/open_ended_results_with_human_label.csv"))
+open_ended_results_raw <- read.csv(here::here("output/data/open_ended_results_with_human_label.csv"))
 open_ended_results_binary_match_agg <- open_ended_results_raw %>%
   select(binary_match) %>%
   group_by(binary_match) %>% 
@@ -191,6 +194,16 @@ open_ended_results_madeup_details
 
 ## Structured Responses
 ```{r}
+structured_a8_t0 <- read.csv(here::here("output/data/structured_results_temp0_attr8.csv"))
+structured_a8_t0 <- left_join(structured_human_label, structured_a8_t0, by = "comment") 
+structured_a8_t0 <- structured_a8_t0 %>%
+  mutate(answer_list = str_split(answer, "|"))
+structured_a8_t0
+```
+
+```{r}
+
+
 ```
 
 # Discussion

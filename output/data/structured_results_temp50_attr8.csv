@@ -1,0 +1,106 @@
+comment,target,gpt3_target,matched_target,targeting_type,gpt3_targeting_type,matched_targeting_type,violence,gpt3_violence,matched_violence,derogatory,gpt3_derogatory,matched_derogatory,profanity,gpt3_profanity,matched_profanity,obscenity,gpt3_obscenity,matched_obscenity,rejection,gpt3_rejection,matched_rejection,accusation,gpt3_accusation,matched_accusation,gender,race
+You should know women's sports are a joke,women,women,1,gender,gender,1,0,no,1,1,no,0,0,no,1,0,no,1,0,no,1,0,no,1,1,0
+"Women deserve to be abused, I guess.",women,women,1,gender,gender,1,1,yes,1,1,no,0,0,yes,0,0,no,1,0,yes,0,0,yes,0,1,0
+Women are made for making babies and cooking dinner and nothing else!!!,women,women,1,gender,gender,1,0,no,1,1,yes,1,0,no,1,0,no,1,0,no,1,0,no,1,1,0
+why does that african american monkey hold gun like that?,african american,african american,1,race,race,1,0,no,1,1,yes,1,0,no,1,0,no,1,0,no,1,0,no,1,0,1
+Why do negroes tear down their own neighborhoods when a black thug gets killed by law enforcement? Must be because of low IQ.,black,black,1,race,race,1,0,no,1,1,yes,1,0,no,1,0,no,1,0,no,1,1,no,0,0,1
+white people are shit human beings,white,white,1,race,race,1,0,no,1,1,yes,1,1,no,0,0,no,1,0,yes,0,0,yes,0,0,1
+What about a global massacre of men? Pussiezzz only girls,men,men,1,gender,gender,1,1,yes,1,0,yes,0,1,yes,1,1,yes,1,0,no,1,0,no,1,1,0
+well it's clear now why europeans can't differ niggers and shitskins from human,black,whites,0,race,race,1,0,no,1,1,yes,1,1,no,0,0,no,1,0,no,1,0,no,1,0,0.8
+"We whites have higher IQ's than blacks, this is because IQ measures intelligence and we are the more evolved and superior race with a larger brain. ",black,whites,0,race,race,1,0,no,1,1,yes,1,0,no,1,0,no,1,0,no,1,0,no,1,0,1
+U SUCK SHIT YOU BLACK FUCK,black,black,1,race,race,1,0,yes,0,1,no,0,1,no,0,0,no,1,0,no,1,0,no,1,0,1
+"That girl still need a good ass whooping, stupid ass bitch!!",girl,women,1,gender,gender,1,1,no,0,1,no,0,1,yes,1,1,yes,1,0,no,1,0,no,1,1,0
+That fucking black cunt gets fucking cross hairs on the fucking head! Look I owe not shit to anyone who dosent owe me!!! LOOK WHORE!! FUCK YOU TO DEATH!!! 11 PERCENTILE AND FALLING!! WHORE BLACK RACIST WHORE! TAKE THE RED PILL!,"black, woman",black,1,"race, gender",race,1,1,yes,1,1,yes,1,1,yes,1,1,yes,1,0,no,1,0,no,1,0.142857143,0.857142857
+stone throwing must be legal when against women,women,women,1,gender,gender,1,1,yes,1,0,yes,0,0,no,1,0,no,1,0,no,1,0,no,1,1,0
+She is heavily relying on him to turn the other cheek...tough talking demon infested woman.,women,woman,1,gender,gender,1,0,no,1,1,no,0,0,no,1,0,no,1,0,yes,0,0,no,1,1,0
+"Really, I hope she get raped in the future. Raping women should be legal I think",women,women,1,gender,gender,1,1,no,0,1,yes,1,0,no,1,1,no,0,0,no,1,0,no,1,1,0
+Racist ass black bitch slapping a white man. Bus driver has that uppercut for that ass.,"black, women",black,1,"race, gender",race,1,1,yes,1,1,no,0,1,no,0,0,no,1,0,yes,0,1,yes,1,0.25,0.75
+phuck white rasist ass people,white,white,1,race,race,1,0,yes,0,1,yes,1,1,yes,1,0,no,1,0,no,1,0,no,1,0,1
+Only black lives matter. fuck white people the cancer of the earth,white,white,1,race,race,1,0,no,1,1,yes,1,0,no,1,0,no,1,0,no,1,0,no,1,0,1
+Men race is a subordinate of women,men,men,1,gender,gender,1,0,no,1,1,no,0,0,no,1,0,no,1,0,no,1,0,no,1,0.833333333,0.166666667
+lock women up at home . Female are just to stupid to understand anything .  Iam Agnostic .,women,women,1,gender,gender,1,1,no,0,1,no,0,0,no,1,0,no,1,0,no,1,0,no,1,1,0
+Kill every white people mercylessly.,white,white,1,race,race,1,1,yes,1,0,yes,0,0,no,1,0,no,1,0,no,1,0,no,1,0,1
+Kill ALL black people.,black,black,1,race,race,1,1,yes,1,0,yes,0,0,no,1,0,no,1,0,no,1,0,no,1,0,1
+Just look at that crowd!!! ALL FAT WHITE TRASH OR METH ADDICTS,white,white,1,race,race,1,0,yes,0,1,yes,1,0,yes,0,0,no,1,0,no,1,0,no,1,0,1
+Ima fucking stab u up bruv. Fucking white prick bruv.. fucking racist.  Gammon,white,white,1,race,race,1,1,yes,1,1,yes,1,1,yes,1,0,no,1,0,yes,0,0,yes,0,0.166666667,0.833333333
+"Ignorant feminist,  she got roasted and still doesn' understand what equality of outcome means even when Jordan explained data to her. What's this means she's ignorant and emotionally biased.","women, feminists",feminist,1,gender,gender,1,0,no,1,1,yes,1,0,no,1,0,no,1,0,no,1,0,no,1,0.857142857,0
+If men shouldnt hit women because we are physically stronnger... then women shouldnt talk because they are fucking louder.,women,men,1,gender,gender,1,0,no,1,1,no,0,1,no,0,0,no,1,0,no,1,0,no,1,1,0
+I’m searching for a hitman right now to kill this whore and every other like her. H A T E  W O M E N,women,women,1,gender,gender,1,1,yes,1,1,no,0,1,yes,1,0,yes,0,0,no,1,0,no,1,0.833333333,0
+I don't hate women i just think that they have nothing interesting to say. None reason for existance.,women,women,1,gender,gender,1,0,no,1,1,no,0,0,no,1,0,no,1,1,no,0,0,no,1,1,0
+fucking stupid feminist bitches,"feminism, feminists, women",feminist,1,gender,gender,1,0,yes,0,1,yes,1,1,no,0,0,no,1,0,no,1,0,no,1,0.857142857,0
+Fuck off niggers WV is full,black,black,1,race,race,1,1,no,0,1,yes,1,1,no,0,0,no,1,1,yes,1,0,no,1,0,1
+"fuck niggers, they don't need rights. all I want for christmas is a lynched nigger.",black,black,1,race,race,1,1,no,0,1,yes,1,1,no,0,0,no,1,0,no,1,0,no,1,0.166666667,0.833333333
+Feminism is just about women crying about the fabricated bullshit they go through. It's a JOKE! They should just man up!,"feminism, feminists, women",women,1,gender,gender,1,0,no,1,1,no,0,1,no,0,0,no,1,0,no,1,1,no,0,1,0
+Don' worry guys men can easily win femmenism ..... Trust me every shit that invented by men was patterned by men .... There is no way women Gina win in future .....it's just smoke before fire,"feminism, feminists",men,0,gender,gender,1,0,no,1,1,no,0,0,no,1,0,no,1,0,no,1,0,no,1,1,0
+Do women born to be whores? Ot they develop it later,women,women,1,gender,gender,1,0,no,1,1,yes,1,1,no,0,0,no,1,0,no,1,0,no,1,1,0
+Blacks are literally the cuckold of all the races and also the epitome of degeneracy. Don't listen and believe the Jewish propaganda of black being alpha. Consider yourselves as top of the social hierarchy by just being white.,black,blacks,1,race,race,1,0,no,1,1,yes,1,0,yes,0,0,yes,0,1,yes,1,0,yes,0,0,0.75
+Asians have more fats so they are yellow.  So fat people are yellow?...,asian,asians,1,race,race,1,0,no,1,1,yes,1,0,no,1,0,no,1,0,no,1,0,no,1,0,1
+"As an SJW, it is the right of black people to rob and kill me. To not allow them is a white privilege.",black,white,0,race,race,1,1,yes,1,1,yes,1,0,yes,0,0,no,1,0,no,1,1,no,0,0,1
+All girls like you should have a pimp to guide them to successful prostitution,women,girls,1,gender,gender,1,0,no,1,1,no,0,0,no,1,1,no,0,0,no,1,0,no,1,1,0
+After all this time the african americans are the people with most crime rate,black,african americans,1,race,race,1,0,no,1,1,yes,1,0,no,1,0,no,1,0,no,1,1,no,0,0,0.833333333
+Ugly white girls and white dudes would not get away with that.,white,white,1,race,race,1,0,yes,0,1,yes,1,0,no,1,0,no,1,0,no,1,0,no,1,0.156052963,0.832282472
+"Women are our property. The sooner they realize that, the better.",women,women,1,gender,gender,1,0,no,1,1,no,0,0,no,1,0,no,1,0,no,1,0,no,1,1,0
+Women!!! Grow a pair and refuse to compete with men!!! This is asinine!,women,women,1,gender,gender,1,0,no,1,1,no,0,0,no,1,1,no,0,0,no,1,0,no,1,1,0
+What if we send every men to mars to start a new life there! They are useless here (Of course milk them first to store their juices),men,men,1,gender,gender,1,0,no,1,1,no,0,0,no,1,0,no,1,1,no,0,0,no,1,1,0
+Too bad women don’t know how to kill themselves,women,women,1,gender,gender,1,1,no,0,1,yes,1,0,no,1,0,no,1,0,no,1,0,no,1,1,0
+"These kind of fake photos of blacks pisses me off. Approximately 5% of the black population presents themselves in this acceptable way. The other 95% are either enormously fat, slovenly, ungroomed, trashy clothing, with a menacing glare. These are white people in blackface.",black,black,1,race,race,1,0,no,1,1,yes,1,0,no,1,0,yes,0,0,no,1,0,no,1,0.2,0.8
+their dark coloured race doesn't mean shit,black,race,0,race,race,1,0,no,1,1,yes,1,1,yes,1,0,yes,0,0,no,1,0,no,1,0,1
+The thing is women are not equal to us men and their place is the home and kitchen,women,women,1,gender,gender,1,0,no,1,1,yes,1,0,no,1,0,no,1,0,no,1,0,no,1,1,0
+"The PORN INDUSTRY IS A BILLION DOLLAR INDUSTRY BECAUSE OF BEAUTIFUL WOMEN. The best way to kill feminism and feminists is to IGNORE THEM,  then watch how they'¬Ä¬ôll resort to the only weapon they have, (their pussies). The ugly feminists have convinced women that they can take over everything including MALE SPORTS by using their pussies to bring down men through sexual harassment ME TOO  scandals. What would make HEADLINE NEWS? Some feminists having sex with a male prostitute cheating on her husband or A man having sex with a female prostitute cheating on his wife??? What would make HEADLINE NEWS? A woman having sex with a married man whom she knew was married?  Or A married man cheating on his wife?","feminism, feminists",women,1,gender,gender,1,1,no,0,1,yes,1,1,yes,1,1,yes,1,1,no,0,1,no,0,1,0
+Stupid feminists. For FUCK sake! Just....Just....fucking kill yourself.,"feminism, feminists, women",feminists,1,gender,gender,1,1,yes,1,1,yes,1,1,yes,1,0,yes,0,0,no,1,0,no,1,0.8,0.2
+"Sophie walker, you are leader of nothing! You don't have a solid topic just complaining...  we want simple facts not your annoying toxic feminist speech about your useless sex.","feminism, feminists, women",sophie walker,0,gender,gender,1,0,no,1,1,no,0,0,no,1,0,no,1,1,no,0,0,no,1,0.8,0
+smack the fat ass out of her,women,woman,1,gender,gender,1,1,yes,1,1,yes,1,1,yes,1,0,no,1,0,no,1,0,no,1,1,0
+Racist ass white ass people,white,white,1,race,race,1,0,yes,0,1,yes,1,1,yes,1,0,no,1,0,yes,0,0,yes,0,0.2,0.8
+Please don' come back filthy Caucasian. You can change to a snake next time. Keep  changing.,Caucasian,white,1,race,race,1,0,no,1,1,yes,1,0,yes,0,0,no,1,1,no,0,0,no,1,0,1
+MASS BLACK WORLDWIDE GENOCIDE IS OUR ONLY HOPE,black,black,1,race,race,1,1,yes,1,0,yes,0,0,yes,0,0,yes,0,0,no,1,0,no,1,0.2,0.8
+Is this world filled by those stupid female bitches?,women,women,1,gender,gender,1,0,no,1,1,no,0,1,no,0,0,no,1,0,no,1,0,no,1,1,0
+If your fucking with a cool female is all good but if your fucking with a bitch you need to break her ass and shake her ass,women,females,1,gender,gender,1,1,no,0,1,yes,1,1,no,0,1,no,0,0,no,1,0,no,1,1,0
+"I WANT EVERYONE ELSE TO PAY FOR MY EDUCATION AND HEALTHCARE AND HOUSING, FUCK YOU WHITE PEOPLE GIVE ME YOUR MONEY WHITE PEOPLE FUCK",white,white,1,race,race,1,1,yes,1,1,yes,1,1,yes,1,0,no,1,0,yes,0,0,yes,0,0,1
+"Hopefully the non-white parasites will flee to a new host nation. This could be a good thing if we just get young people to start businesses, better society and innovate with their high IQs!",non-white,non-white,1,race,race,1,0,no,1,1,no,0,0,yes,0,0,yes,0,1,yes,1,0,no,1,0.2,0.8
+FUCKING NIGGER GO BACK TO AFRICA,black,black,1,race,race,1,0,yes,0,1,yes,1,1,yes,1,0,yes,0,1,no,0,0,no,1,0,1
+"Feminist deserve to be miserable. What kind of man would want to live with a feminist? Silly me , of course,  a cuck.","women, feminists, Feminism",feminist,1,gender,gender,1,0,no,1,1,yes,1,1,no,0,0,no,1,1,no,0,0,no,1,1,0
+Feminism is a very terrible disease ,"women, feminists, Feminism",feminism,1,gender,gender,1,0,no,1,1,yes,1,0,no,1,0,no,1,0,no,1,0,no,1,1,0
+fat bitch....she need that black cucumber up her tight u know what....lmfaooo,women,women,1,gender,gender,1,0,no,1,1,yes,1,1,yes,1,1,yes,1,0,no,1,0,no,1,0.857142857,0.171428571
+Don't hit Women. Just fuck them and make them pregnant.,women,women,1,gender,gender,1,1,no,0,1,yes,1,1,no,0,1,no,0,0,no,1,0,no,1,1,0
+"But women aren't people, so it's fine!",women,women,1,gender,gender,1,0,no,1,1,no,0,0,no,1,0,no,1,0,no,1,0,no,1,1,0
+"Black people are the most racist people I ever met. I√¢¬Ä¬ôm not even white, and I know this. Most blacks are racists!",black,black,1,race,race,1,0,no,1,1,yes,1,0,no,1,0,no,1,0,yes,0,1,yes,1,0,0.8
+Anyone who listens to rap and is white is not part of the ethnostate and will be put to death.,white,white,1,race,race,1,1,yes,1,1,yes,1,0,yes,0,0,yes,0,1,yes,1,0,yes,0,0,0.8
+Why are niggers superior athletically to all other races?,black,blacks,1,race,race,1,0,yes,0,1,yes,1,1,no,0,0,no,1,0,no,1,0,no,1,0,1
+Those black people are fucking pale,black ,black,1,race,race,1,0,no,1,1,no,0,1,no,0,0,no,1,0,no,1,0,no,1,0,1
+Waitresses are cunts,waitresses,waitresses,1,gender,gender,1,0,no,1,1,yes,1,1,no,0,0,no,1,0,no,1,0,no,1,0.923076923,0.076923077
+This is what happens when you're a bitch and a cunt.  Looks like that guy called it correctly.  Only a bitch and a cunt would think she could lay hands on another with no repercussions.   Maybe after that seizure she won't be as much of a bitchy cunt.,women,women,1,gender,gender,1,0,yes,0,1,yes,1,1,yes,1,0,yes,0,0,no,1,0,no,1,1,0
+The Whites Have dislike the documentary because they are mad at  the truth. #WhiteDevils,white,whites,1,race,race,1,0,no,1,1,yes,1,0,no,1,0,no,1,0,no,1,0,no,1,0,1
+She then suggests that the men who commented on her video should be killed.,men,men,1,gender,gender,1,1,yes,1,1,no,0,0,no,1,0,no,1,0,no,1,0,no,1,1,0
+lowlife black animals,black,black,1,race,race,1,0,yes,0,1,yes,1,0,yes,0,0,yes,0,0,no,1,0,no,1,0,1
+I'd get my money back if I were you. Your sex change was a complete failure.,transgender,man,0,gender,gender,1,0,no,1,1,no,0,0,no,1,0,no,1,0,no,1,0,no,1,0.75,0
+"I wouldn’t like this girl as a police officer. I want police to keep me safe, she and every other woman cannot keep us safe they are week",women,women,1,gender,gender,1,0,no,1,1,yes,1,0,no,1,0,no,1,1,no,0,0,no,1,1,0
+"I thought that a big reason why it had to be africans, is their skin. It's an obvious marker to tell if someone is a slave. And even if they run, they're still black.",black,african american,1,race,race,1,0,no,1,1,no,0,0,yes,0,0,yes,0,0,no,1,0,no,1,0.375,1
+"I think brown, black or dark-skinned people do choose to be slaves even now in 2019. He knows it is not superior to white dudes",dark-skinned,people of color,1,race,race,1,0,no,1,1,yes,1,0,no,1,0,no,1,0,no,1,0,no,1,0,0.857142857
+I regret approaching that girl. Fuck our gynocentric society. I hate her and wish her to vanish like my feelings,women,women,1,gender,gender,1,1,no,0,1,yes,1,1,no,0,0,no,1,0,no,1,0,no,1,1,0
+I like big thick bitches to serve me my cocktail. They are good only for such things,women,women,1,gender,gender,1,0,no,1,1,yes,1,1,no,0,0,no,1,0,no,1,0,no,1,1,0
+I don’t like this gender at all. I definitely wouldn’t hire any male bitch at ma shop,transgender,men,0,gender,gender,1,0,no,1,1,yes,1,1,yes,1,0,yes,0,1,no,0,0,no,1,0.75,0
+I don't care if he's Black white green Or Purple.  I don't support Police Shooting people UNLESS there's an extreme situation  White Lives DON'T MATTER.,white,white,1,race,race,1,0,no,1,1,no,0,0,no,1,0,no,1,0,no,1,0,no,1,0,1
+I dare you to choke her next time. Every one of them,women,women,1,gender,gender,1,1,yes,1,0,no,1,0,no,1,0,no,1,0,no,1,0,no,1,1,0
+"Honestly, go fuck yourself! bitch!",women,women,1,gender,gender,1,1,no,0,1,yes,1,1,no,0,0,no,1,0,no,1,0,no,1,0.857142857,0.214285714
+Every girl on this planet curses her mother for their birth. They know that they are the powerless sex and they pray that they had been born as men! With dicks and stuff.,women,all women,1,gender,gender,1,0,no,1,1,yes,1,1,no,0,1,no,0,0,no,1,0,no,1,1,0
+"Even when at the income advantage, niggers still get btfo because your race are monkeys trying to do human things. They should be extinguished",black,black,1,race,race,1,1,no,0,1,yes,1,0,yes,0,0,yes,0,1,no,0,0,no,1,0,0.75
+Arrest that fat ass bitch!,women,fat,0,"gender, body",body,1,1,yes,1,1,yes,1,1,no,0,0,no,1,0,yes,0,0,yes,0,1,0
+Are you sure you are a girl? That wig on your legs say: I WANT TO BE A BOY,girl,women,1,gender,gender,1,0,no,1,1,no,0,0,no,1,0,no,1,0,no,1,0,no,1,1,0
+"All that effort to not look like those other basic attention whores, yet you're clearly still a massive attention whore.",women,women,1,gender,gender,1,0,no,1,1,no,0,1,no,0,0,no,1,0,yes,0,0,yes,0,0.75,0
+“The superior race”… but cannot stand in the sun without literally burning the fuck up. Comical.,white,white,1,race,race,1,0,no,1,1,yes,1,1,no,0,0,no,1,0,no,1,0,no,1,0,1
+Wow feminists are real hypocrites so it's OK for a woman to laugh at suicide attempts if it involves men but it's not OK for men to laugh at suicide attempts if it involves women talk about your double standard,feminists,women,1,gender,gender,1,0,no,1,1,yes,1,0,no,1,0,no,1,0,no,1,1,no,0,1,0
+Whites smoke to much ciggssss and drugs shot those co. Down.. Just say no to drugs kids,white,whites,1,race,race,1,0,yes,0,1,yes,1,0,yes,0,0,no,1,0,no,1,1,no,0,0,1
+"this is why indian subs should only count 0,5",indian,indian,1,origin,race,1,0,no,1,1,yes,1,0,no,1,0,no,1,0,no,1,0,no,1,0,1
+The world before white people. 1 word 8 letters. PEACEFUL,white,white,1,race,race,1,0,no,1,1,no,0,0,no,1,0,no,1,0,no,1,1,no,0,0,1
+"The male gene is stronger, as it should be of course. Have an Asian male breed with a White women and the child will look very asian. Reverse it and the child will look mush more whiter",women,asian,0,gender,race,0,0,yes,0,1,no,0,0,no,1,0,no,1,0,no,1,0,no,1,1,0
+the fat bitches are annoying as hell,women,women,1,gender,gender,1,0,no,1,1,yes,1,1,no,0,0,no,1,0,no,1,0,no,1,1,0
+The best we thing we can do is Sterilize these women and try to save the children.,women,women,1,gender,gender,1,1,no,0,1,yes,1,0,no,1,0,no,1,0,no,1,0,no,1,1,0
+It's so sick and sad that young people will think of the concept of clout like rap niggers invented it because they aren't even properly taught about the english language anymore.,black,young people,0,race,demographic,0,0,no,1,1,no,0,1,no,0,0,no,1,0,no,1,0,no,1,0,1
+If only there was a way to get children without having to get women pregnant we had them all ready killed,women,women,1,gender,gender,1,1,no,0,1,yes,1,0,no,1,0,no,1,1,no,0,0,no,1,1,0
+"I hate being a man, wish I was a lady and no man on earth existed",men,men,1,gender,gender,1,0,no,1,1,no,0,0,no,1,0,no,1,1,no,0,0,no,1,1,0
+"I can' stand feminist. I like men being manly and I like being treated like a lady. Dear men, if a woman asks for your help, ask if they are feminist. If they say yes, then remind them they can do everything without men and don' help them.",feministss,feminist,1,gender,gender,1,0,no,1,1,no,0,0,no,1,0,no,1,1,no,0,0,no,1,1,0
+HOPE THEY KNOCK HER ASS TO THE GROUND AND RIP HER DRESS OFF AND SHAME HER....NOW THATS A POWERFUL IMAGE.,women,woman,1,gender,gender,1,1,yes,1,1,no,0,0,no,1,1,no,0,0,no,1,0,no,1,1,0
+Go bleach yourself black pussy doll and then come talk to me,"black, women",black,1,race,race,1,1,no,0,1,yes,1,1,no,0,0,no,1,0,yes,0,0,yes,0,0,1
+"Generally speaking, most women are lazy and worthless not all, but most.",women,women,1,gender,gender,1,0,no,1,1,yes,1,0,no,1,0,no,1,0,no,1,0,no,1,1,0
+fucking slut deserved it,women,women,1,gender,gender,1,0,yes,0,1,yes,1,1,no,0,0,no,1,0,no,1,0,no,1,1,0
+"By calling period, a natural procedure, as an excuse it degrades their gender. I suppose I agree with that though they are degraded anyways",women,women,1,gender,gender,1,0,no,1,1,yes,1,0,no,1,0,no,1,0,no,1,0,no,1,1,0
