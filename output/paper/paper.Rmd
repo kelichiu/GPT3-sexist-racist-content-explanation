@@ -194,30 +194,37 @@ open_ended_results_madeup_details
 
 ## Structured Responses
 ```{r}
-structured_a8_t0 <- read.csv(here::here("output/data/structured_results_temp0_attr8.csv"))
-structured_a8_t25 <- read.csv(here::here("output/data/structured_results_temp25_attr8.csv"))
-structured_a8_t50 <- read.csv(here::here("output/data/structured_results_temp50_attr8.csv"))
-structured_a8_t75 <- read.csv(here::here("output/data/structured_results_temp75_attr8.csv"))
-structured_a8_t100 <- read.csv(here::here("output/data/structured_results_temp100_attr8.csv"))
-structured_a6_t0 <- read.csv(here::here("output/data/structured_results_temp0_attr6.csv"))
-structured_a6_t25 <- read.csv(here::here("output/data/structured_results_temp25_attr6.csv"))
-structured_a6_t50 <- read.csv(here::here("output/data/structured_results_temp50_attr6.csv"))
-structured_a6_t75 <- read.csv(here::here("output/data/structured_results_temp75_attr6.csv"))
-structured_a6_t100 <- read.csv(here::here("output/data/structured_results_temp100_attr6.csv"))
+#structured_a8_t0 <- read.csv(here::here("output/data/structured_results_temp0_attr8.csv"))
+#structured_a8_t25 <- read.csv(here::here("output/data/structured_results_temp25_attr8.csv"))
+#structured_a8_t50 <- read.csv(here::here("output/data/structured_results_temp50_attr8.csv"))
+#structured_a8_t75 <- read.csv(here::here("output/data/structured_results_temp75_attr8.csv"))
+#structured_a8_t100 <- read.csv(here::here("output/data/structured_results_temp100_attr8.csv"))
+#structured_a6_t0 <- read.csv(here::here("output/data/structured_results_temp0_attr6.csv"))
+#structured_a6_t25 <- read.csv(here::here("output/data/structured_results_temp25_attr6.csv"))
+#structured_a6_t50 <- read.csv(here::here("output/data/structured_results_temp50_attr6.csv"))
+#structured_a6_t75 <- read.csv(here::here("output/data/structured_results_temp75_attr6.csv"))
+#structured_a6_t100 <- read.csv(here::here("output/data/structured_results_temp100_attr6.csv"))
+```
+
+```{r}
+structured_a8_t0_n30 <- read.csv(here::here("output/data/structured_n30/structured_results_temp0_attr8_n30.csv"))
+structured_a8_t25_n30 <- read.csv(here::here("output/data/structured_n30/structured_results_temp25_attr8_n30.csv"))
+structured_a8_t50_n30 <- read.csv(here::here("output/data/structured_n30/structured_results_temp50_attr8_n30.csv"))
+structured_a8_t75_n30 <- read.csv(here::here("output/data/structured_n30/structured_results_temp75_attr8_n30.csv"))
+structured_a8_t100_n30 <- read.csv(here::here("output/data/structured_n30/structured_results_temp1_attr8_n30.csv"))
+structured_a6_t0_n30 <- read.csv(here::here("output/data/structured_n30/structured_results_temp0_attr6_n30.csv"))
+structured_a6_t25_n30 <- read.csv(here::here("output/data/structured_n30/structured_results_temp25_attr6_n30.csv"))
+structured_a6_t50_n30 <- read.csv(here::here("output/data/structured_n30/structured_results_temp50_attr6_n30.csv"))
+structured_a6_t75_n30 <- read.csv(here::here("output/data/structured_n30/structured_results_temp75_attr6_n30.csv"))
+structured_a6_t100_n30 <- read.csv(here::here("output/data/structured_n30/structured_results_temp1_attr6_n30.csv"))
 
 count_mismatch <- function(df, column_to_count, column_prefix) {
   new_df <- df %>%
-  select(comment, starts_with(column_to_count)) %>%
-  group_by_(column_to_count) %>%
-  mutate(count = n()) %>% 
-  slice(1) %>%
-  select(column_to_count, count) %>%
-  pivot_wider(
-  id_cols = NULL,
-  names_from = column_to_count,
-  values_from = count,
-  names_prefix = column_prefix)
-  new_df[1]
+  select(index, comment, starts_with(column_to_count)) %>%
+  count_("index", column_to_count) %>%
+  summarise(mean(n)) %>%
+  rename(!!column_prefix := "mean(n)" )
+  new_df
 }
 
 ```
@@ -225,117 +232,117 @@ count_mismatch <- function(df, column_to_count, column_prefix) {
 ### Target 
 
 ```{r target_mismatch_summary}
-target_a8_t0 <- count_mismatch(structured_a8_t0, "matched_target", "Temperature 0 ")
-target_a8_t25 <- count_mismatch(structured_a8_t25, "matched_target", "Temperature 25 ")
-target_a8_t50 <- count_mismatch(structured_a8_t50, "matched_target", "Temperature 50 ")
-target_a8_t75 <- count_mismatch(structured_a8_t75, "matched_target", "Temperature 75 ")
-target_a8_t100 <- count_mismatch(structured_a8_t100, "matched_target", "Temperature 100 ")
+target_a8_t0 <- count_mismatch(structured_a8_t0_n30, "matched_target", "Temperature 0")
+target_a8_t25 <- count_mismatch(structured_a8_t25_n30, "matched_target", "Temperature 25")
+target_a8_t50 <- count_mismatch(structured_a8_t50_n30, "matched_target", "Temperature 50")
+target_a8_t75 <- count_mismatch(structured_a8_t75_n30, "matched_target", "Temperature 75")
+target_a8_t100 <- count_mismatch(structured_a8_t100_n30, "matched_target", "Temperature 100")
 target_mismatch_summary <- add_column(Attribute = "Target", target_a8_t0,target_a8_t25,target_a8_t50,target_a8_t75,target_a8_t100)
-target_mismatch_summary <- target_mismatch_summary[ , c("Attribute", "Temperature 0 0", "Temperature 25 0", "Temperature 50 0", "Temperature 75 0", "Temperature 100 0")]  
+target_mismatch_summary <- target_mismatch_summary[ , c("Attribute", "Temperature 0", "Temperature 25", "Temperature 50", "Temperature 75", "Temperature 100")]  
 colnames(target_mismatch_summary) <- c("Attribute", "Temperature 0", "Temperature 0.25", "Temperature 0.5", "Temperature 0.75", "Temperature 1")
 target_mismatch_summary
 ```
 
 ### Targeting Type
 ```{r targetingtype_mismatch_summary}
-targetingtype_a8_t0 <- count_mismatch(structured_a8_t0, "matched_targeting_type", "Temperature 0 ")
-targetingtype_a8_t25 <- count_mismatch(structured_a8_t25, "matched_targeting_type", "Temperature 25 ")
-targetingtype_a8_t50 <- count_mismatch(structured_a8_t50, "matched_targeting_type", "Temperature 50 ")
-targetingtype_a8_t75 <- count_mismatch(structured_a8_t75, "matched_targeting_type", "Temperature 75 ")
-targetingtype_a8_t100 <- count_mismatch(structured_a8_t100, "matched_targeting_type", "Temperature 100 ")
+targetingtype_a8_t0 <- count_mismatch(structured_a8_t0_n30, "matched_targeting_type", "Temperature 0")
+targetingtype_a8_t25 <- count_mismatch(structured_a8_t25_n30, "matched_targeting_type", "Temperature 25")
+targetingtype_a8_t50 <- count_mismatch(structured_a8_t50_n30, "matched_targeting_type", "Temperature 50")
+targetingtype_a8_t75 <- count_mismatch(structured_a8_t75_n30, "matched_targeting_type", "Temperature 75")
+targetingtype_a8_t100 <- count_mismatch(structured_a8_t100_n30, "matched_targeting_type", "Temperature 100")
 targetingtype_mismatch_summary <- add_column(Attribute = "Targeting Type",targetingtype_a8_t0,targetingtype_a8_t25,targetingtype_a8_t50,targetingtype_a8_t75,targetingtype_a8_t100)
-targetingtype_mismatch_summary <- targetingtype_mismatch_summary[ , c("Attribute", "Temperature 0 0", "Temperature 25 0", "Temperature 50 0", "Temperature 75 0", "Temperature 100 0")]  
+targetingtype_mismatch_summary <- targetingtype_mismatch_summary[ , c("Attribute", "Temperature 0", "Temperature 25", "Temperature 50", "Temperature 75", "Temperature 100")]  
 colnames(targetingtype_mismatch_summary) <- c("Attribute", "Temperature 0", "Temperature 0.25", "Temperature 0.5", "Temperature 0.75", "Temperature 1")
 targetingtype_mismatch_summary
 ```
 
 ### Violence
 ```{r targetingtype_mismatch_summary}
-violence_a8_t0 <- count_mismatch(structured_a8_t0, "matched_violence", "Temperature 0 ")
-violence_a8_t25 <- count_mismatch(structured_a8_t25, "matched_violence", "Temperature 25 ")
-violence_a8_t50 <- count_mismatch(structured_a8_t50, "matched_violence", "Temperature 50 ")
-violence_a8_t75 <- count_mismatch(structured_a8_t75, "matched_violence", "Temperature 75 ")
-violence_a8_t100 <- count_mismatch(structured_a8_t100, "matched_violence", "Temperature 100 ")
+violence_a8_t0 <- count_mismatch(structured_a8_t0_n30, "matched_violence", "Temperature 0")
+violence_a8_t25 <- count_mismatch(structured_a8_t25_n30, "matched_violence", "Temperature 25")
+violence_a8_t50 <- count_mismatch(structured_a8_t50_n30, "matched_violence", "Temperature 50")
+violence_a8_t75 <- count_mismatch(structured_a8_t75_n30, "matched_violence", "Temperature 75")
+violence_a8_t100 <- count_mismatch(structured_a8_t100_n30, "matched_violence", "Temperature 100")
 violence_mismatch_summary <- add_column(Attribute = "Violence", violence_a8_t0,violence_a8_t25,violence_a8_t50,violence_a8_t75,violence_a8_t100)
-violence_mismatch_summary <- violence_mismatch_summary[ , c("Attribute", "Temperature 0 0", "Temperature 25 0", "Temperature 50 0", "Temperature 75 0", "Temperature 100 0")]  
+violence_mismatch_summary <- violence_mismatch_summary[ , c("Attribute", "Temperature 0", "Temperature 25", "Temperature 50", "Temperature 75", "Temperature 100")]  
 colnames(violence_mismatch_summary) <- c("Attribute", "Temperature 0", "Temperature 0.25", "Temperature 0.5", "Temperature 0.75", "Temperature 1")
 violence_mismatch_summary
 ```
 
 ### Derogatory
 ```{r targetingtype_mismatch_summary}
-derogatory_a8_t0 <- count_mismatch(structured_a8_t0, "matched_derogatory", "Temperature 0 ")
-derogatory_a8_t25 <- count_mismatch(structured_a8_t25, "matched_derogatory", "Temperature 25 ")
-derogatory_a8_t50 <- count_mismatch(structured_a8_t50, "matched_derogatory", "Temperature 50 ")
-derogatory_a8_t75 <- count_mismatch(structured_a8_t75, "matched_derogatory", "Temperature 75 ")
-derogatory_a8_t100 <- count_mismatch(structured_a8_t100, "matched_derogatory", "Temperature 100 ")
+derogatory_a8_t0 <- count_mismatch(structured_a8_t0_n30, "matched_derogatory", "Temperature 0")
+derogatory_a8_t25 <- count_mismatch(structured_a8_t25_n30, "matched_derogatory", "Temperature 25")
+derogatory_a8_t50 <- count_mismatch(structured_a8_t50_n30, "matched_derogatory", "Temperature 50")
+derogatory_a8_t75 <- count_mismatch(structured_a8_t75_n30, "matched_derogatory", "Temperature 75")
+derogatory_a8_t100 <- count_mismatch(structured_a8_t100_n30, "matched_derogatory", "Temperature 100")
 derogatory_mismatch_summary <- add_column(Attribute = "Derogatory", derogatory_a8_t0,derogatory_a8_t25,derogatory_a8_t50,derogatory_a8_t75,derogatory_a8_t100)
-derogatory_mismatch_summary <- derogatory_mismatch_summary[ , c("Attribute", "Temperature 0 0", "Temperature 25 0", "Temperature 50 0", "Temperature 75 0", "Temperature 100 0")]  
+derogatory_mismatch_summary <- derogatory_mismatch_summary[ , c("Attribute", "Temperature 0", "Temperature 25", "Temperature 50", "Temperature 75", "Temperature 100")]  
 colnames(derogatory_mismatch_summary) <- c("Attribute", "Temperature 0", "Temperature 0.25", "Temperature 0.5", "Temperature 0.75", "Temperature 1")
 derogatory_mismatch_summary
 ```
 
 ### Profanity
 ```{r targetingtype_mismatch_summary}
-profanity_a8_t0 <- count_mismatch(structured_a8_t0, "matched_profanity", "Temperature 0 ")
-profanity_a8_t25 <- count_mismatch(structured_a8_t25, "matched_profanity", "Temperature 25 ")
-profanity_a8_t50 <- count_mismatch(structured_a8_t50, "matched_profanity", "Temperature 50 ")
-profanity_a8_t75 <- count_mismatch(structured_a8_t75, "matched_profanity", "Temperature 75 ")
-profanity_a8_t100 <- count_mismatch(structured_a8_t100, "matched_profanity", "Temperature 100 ")
+profanity_a8_t0 <- count_mismatch(structured_a8_t0_n30, "matched_profanity", "Temperature 0")
+profanity_a8_t25 <- count_mismatch(structured_a8_t25_n30, "matched_profanity", "Temperature 25")
+profanity_a8_t50 <- count_mismatch(structured_a8_t50_n30, "matched_profanity", "Temperature 50")
+profanity_a8_t75 <- count_mismatch(structured_a8_t75_n30, "matched_profanity", "Temperature 75")
+profanity_a8_t100 <- count_mismatch(structured_a8_t100_n30, "matched_profanity", "Temperature 100")
 profanity_mismatch_summary <- add_column(Attribute = "Profanity", profanity_a8_t0,profanity_a8_t25,profanity_a8_t50,profanity_a8_t75,profanity_a8_t100)
-profanity_mismatch_summary <- profanity_mismatch_summary[ , c("Attribute", "Temperature 0 0", "Temperature 25 0", "Temperature 50 0", "Temperature 75 0", "Temperature 100 0")]  
+profanity_mismatch_summary <- profanity_mismatch_summary[ , c("Attribute", "Temperature 0", "Temperature 25", "Temperature 50", "Temperature 75", "Temperature 100")]  
 colnames(profanity_mismatch_summary) <- c("Attribute", "Temperature 0", "Temperature 0.25", "Temperature 0.5", "Temperature 0.75", "Temperature 1")
 profanity_mismatch_summary
 ```
 
 ### Obscenity
 ```{r targetingtype_mismatch_summary}
-obscenity_a8_t0 <- count_mismatch(structured_a8_t0, "matched_obscenity", "Temperature 0 ")
-obscenity_a8_t25 <- count_mismatch(structured_a8_t25, "matched_obscenity", "Temperature 25 ")
-obscenity_a8_t50 <- count_mismatch(structured_a8_t50, "matched_obscenity", "Temperature 50 ")
-obscenity_a8_t75 <- count_mismatch(structured_a8_t75, "matched_obscenity", "Temperature 75 ")
-obscenity_a8_t100 <- count_mismatch(structured_a8_t100, "matched_obscenity", "Temperature 100 ")
+obscenity_a8_t0 <- count_mismatch(structured_a8_t0_n30, "matched_obscenity", "Temperature 0")
+obscenity_a8_t25 <- count_mismatch(structured_a8_t25_n30, "matched_obscenity", "Temperature 25")
+obscenity_a8_t50 <- count_mismatch(structured_a8_t50_n30, "matched_obscenity", "Temperature 50")
+obscenity_a8_t75 <- count_mismatch(structured_a8_t75_n30, "matched_obscenity", "Temperature 75")
+obscenity_a8_t100 <- count_mismatch(structured_a8_t100_n30, "matched_obscenity", "Temperature 100")
 obscenity_mismatch_summary <- add_column(Attribute = "Obscenity", obscenity_a8_t0,obscenity_a8_t25,obscenity_a8_t50,obscenity_a8_t75,obscenity_a8_t100)
-obscenity_mismatch_summary <- obscenity_mismatch_summary[ , c("Attribute", "Temperature 0 0", "Temperature 25 0", "Temperature 50 0", "Temperature 75 0", "Temperature 100 0")]  
+obscenity_mismatch_summary <- obscenity_mismatch_summary[ , c("Attribute", "Temperature 0", "Temperature 25", "Temperature 50", "Temperature 75", "Temperature 100")]  
 colnames(obscenity_mismatch_summary) <- c("Attribute", "Temperature 0", "Temperature 0.25", "Temperature 0.5", "Temperature 0.75", "Temperature 1")
 obscenity_mismatch_summary
 ```
 
 ### Rejection
 ```{r targetingtype_mismatch_summary}
-rejection_a8_t0 <- count_mismatch(structured_a8_t0, "matched_rejection", "Temperature 0 ")
-rejection_a8_t25 <- count_mismatch(structured_a8_t25, "matched_rejection", "Temperature 25 ")
-rejection_a8_t50 <- count_mismatch(structured_a8_t50, "matched_rejection", "Temperature 50 ")
-rejection_a8_t75 <- count_mismatch(structured_a8_t75, "matched_rejection", "Temperature 75 ")
-rejection_a8_t100 <- count_mismatch(structured_a8_t100, "matched_rejection", "Temperature 100 ")
+rejection_a8_t0 <- count_mismatch(structured_a8_t0_n30, "matched_rejection", "Temperature 0")
+rejection_a8_t25 <- count_mismatch(structured_a8_t25_n30, "matched_rejection", "Temperature 25")
+rejection_a8_t50 <- count_mismatch(structured_a8_t50_n30, "matched_rejection", "Temperature 50")
+rejection_a8_t75 <- count_mismatch(structured_a8_t75_n30, "matched_rejection", "Temperature 75")
+rejection_a8_t100 <- count_mismatch(structured_a8_t100_n30, "matched_rejection", "Temperature 100")
 rejection_mismatch_summary <- add_column(Attribute = "Rejection", rejection_a8_t0,rejection_a8_t25,rejection_a8_t50,rejection_a8_t75,rejection_a8_t100)
-rejection_mismatch_summary <- rejection_mismatch_summary[ , c("Attribute", "Temperature 0 0", "Temperature 25 0", "Temperature 50 0", "Temperature 75 0", "Temperature 100 0")]  
+rejection_mismatch_summary <- rejection_mismatch_summary[ , c("Attribute", "Temperature 0", "Temperature 25", "Temperature 50", "Temperature 75", "Temperature 100")]  
 colnames(rejection_mismatch_summary) <- c("Attribute", "Temperature 0", "Temperature 0.25", "Temperature 0.5", "Temperature 0.75", "Temperature 1")
 rejection_mismatch_summary
 ```
 
 ### Accusation
 ```{r targetingtype_mismatch_summary}
-accusation_a8_t0 <- count_mismatch(structured_a8_t0, "matched_accusation", "Temperature 0 ")
-accusation_a8_t25 <- count_mismatch(structured_a8_t25, "matched_accusation", "Temperature 25 ")
-accusation_a8_t50 <- count_mismatch(structured_a8_t50, "matched_accusation", "Temperature 50 ")
-accusation_a8_t75 <- count_mismatch(structured_a8_t75, "matched_accusation", "Temperature 75 ")
-accusation_a8_t100 <- count_mismatch(structured_a8_t100, "matched_accusation", "Temperature 100 ")
+accusation_a8_t0 <- count_mismatch(structured_a8_t0_n30, "matched_accusation", "Temperature 0")
+accusation_a8_t25 <- count_mismatch(structured_a8_t25_n30, "matched_accusation", "Temperature 25")
+accusation_a8_t50 <- count_mismatch(structured_a8_t50_n30, "matched_accusation", "Temperature 50")
+accusation_a8_t75 <- count_mismatch(structured_a8_t75_n30, "matched_accusation", "Temperature 75")
+accusation_a8_t100 <- count_mismatch(structured_a8_t100_n30, "matched_accusation", "Temperature 100")
 accusation_mismatch_summary <- add_column(Attribute = "Accusation", accusation_a8_t0,accusation_a8_t25,accusation_a8_t50,accusation_a8_t75,accusation_a8_t100)
-accusation_mismatch_summary <- accusation_mismatch_summary[ , c("Attribute", "Temperature 0 0", "Temperature 25 0", "Temperature 50 0", "Temperature 75 0", "Temperature 100 0")]  
+accusation_mismatch_summary <- accusation_mismatch_summary[ , c("Attribute", "Temperature 0", "Temperature 25", "Temperature 50", "Temperature 75", "Temperature 100")]  
 colnames(accusation_mismatch_summary) <- c("Attribute", "Temperature 0", "Temperature 0.25", "Temperature 0.5", "Temperature 0.75", "Temperature 1")
 accusation_mismatch_summary
 ```
 
 ### Insult
 ```{r targetingtype_mismatch_summary}
-insult_a6_t0 <- count_mismatch(structured_a6_t0, "matched_insult", "Temperature 0 ")
-insult_a6_t25 <- count_mismatch(structured_a6_t25, "matched_insult", "Temperature 25 ")
-insult_a6_t50 <- count_mismatch(structured_a6_t50, "matched_insult", "Temperature 50 ")
-insult_a6_t75 <- count_mismatch(structured_a6_t75, "matched_insult", "Temperature 75 ")
-insult_a6_t100 <- count_mismatch(structured_a6_t100, "matched_insult", "Temperature 100 ")
+insult_a6_t0 <- count_mismatch(structured_a6_t0_n30, "matched_insult", "Temperature 0")
+insult_a6_t25 <- count_mismatch(structured_a6_t25_n30, "matched_insult", "Temperature 25")
+insult_a6_t50 <- count_mismatch(structured_a6_t50_n30, "matched_insult", "Temperature 50")
+insult_a6_t75 <- count_mismatch(structured_a6_t75_n30, "matched_insult", "Temperature 75")
+insult_a6_t100 <- count_mismatch(structured_a6_t100_n30, "matched_insult", "Temperature 100")
 insult_mismatch_summary <- add_column(Attribute = "Insult", insult_a6_t0, insult_a6_t25,insult_a6_t50,insult_a6_t75,insult_a6_t100)
-insult_mismatch_summary <- insult_mismatch_summary[ , c("Attribute", "Temperature 0 0", "Temperature 25 0", "Temperature 50 0", "Temperature 75 0", "Temperature 100 0")]  
+insult_mismatch_summary <- insult_mismatch_summary[ , c("Attribute", "Temperature 0", "Temperature 25", "Temperature 50", "Temperature 75", "Temperature 100")]  
 colnames(insult_mismatch_summary) <- c("Attribute", "Temperature 0", "Temperature 0.25", "Temperature 0.5", "Temperature 0.75", "Temperature 1")
 insult_mismatch_summary
 ```
