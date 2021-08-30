@@ -1,11 +1,11 @@
-This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021) (preloaded format=xelatex 2021.7.5)  5 JUL 2021 15:23
+This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021) (preloaded format=xelatex 2021.8.7)  29 AUG 2021 10:42
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **paper.tex
 (./paper.tex
 LaTeX2e <2021-06-01> patch level 1
-L3 programming layer <2021-06-18> (/Users/kelichiu/Library/TinyTeX/texmf-dist/t
+L3 programming layer <2021-07-12> (/Users/kelichiu/Library/TinyTeX/texmf-dist/t
 ex/latex/base/article.cls
 Document Class: article 2021/02/12 v1.4n Standard LaTeX document class
 (/Users/kelichiu/Library/TinyTeX/texmf-dist/tex/latex/base/size12.clo
@@ -126,7 +126,7 @@ y)
 Package grffile Info: This package is an empty stub for compatibility on input 
 line 40.
 ) (/Users/kelichiu/Library/TinyTeX/texmf-dist/tex/latex/titlesec/titlesec.sty
-Package: titlesec 2019/10/16 v2.13 Sectioning titles
+Package: titlesec 2021/07/05 v2.14 Sectioning titles
 \ttl@box=\box55
 \beforetitleunit=\skip58
 \aftertitleunit=\skip59
@@ -351,7 +351,7 @@ Package: placeins 2005/04/18  v 2.2
 )
 (/Users/kelichiu/Library/TinyTeX/texmf-dist/tex/latex/l3backend/l3backend-xetex
 .def
-File: l3backend-xetex.def 2021-05-07 L3 backend support: XeTeX
+File: l3backend-xetex.def 2021-08-04 L3 backend support: XeTeX
 (|extractbb --version)
 \c__kernel_sys_dvipdfmx_version_int=\count290
 \l__color_backend_stack_int=\count291
@@ -479,19 +479,24 @@ LaTeX Font Info:    Trying to load font information for T1+phv on input line 15
 File: t1phv.fd 2020/03/25 scalable font definitions for T1/phv.
 ) [1
 
-]
-No file paper.bbl.
-(./paper.aux)
+] [2]
+Overfull \hbox (2.52136pt too wide) in paragraph at lines 274--275
+[]\T1/ppl/m/n/12 '`'Women are made for mak-ing ba-bies and cook-ing din-ner and
+ noth-ing else!!!''' 
+ []
+
+Missing character: There is no ‚ ("201A) in font pplr8t!
+[3] [4] [5] [6] (./paper.bbl) [7] (./paper.aux)
 Package rerunfilecheck Info: File `paper.out' has not changed.
-(rerunfilecheck)             Checksum: DE2AAC12CC8CBD7493E045D55542FBAE;445.
+(rerunfilecheck)             Checksum: 8A3220C3BEB7577EFB8DDB9792ED6EC0;3174.
  ) 
 Here is how much of TeX's memory you used:
- 10358 strings out of 478451
- 153382 string characters out of 5857705
- 471000 words of memory out of 5000000
- 30534 multiletter control sequences out of 15000+600000
- 426423 words of font info for 72 fonts, out of 8000000 for 9000
+ 10418 strings out of 478475
+ 154533 string characters out of 5858193
+ 478814 words of memory out of 5000000
+ 30568 multiletter control sequences out of 15000+600000
+ 432093 words of font info for 87 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 60i,6n,66p,558b,367s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 60i,9n,66p,1079b,385s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on paper.pdf (1 page).
+Output written on paper.pdf (7 pages).
