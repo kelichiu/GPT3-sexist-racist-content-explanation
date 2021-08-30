@@ -338,9 +338,7 @@ accusation_mismatch_summary <- accusation_mismatch_summary[ , c("Attribute", "Te
 colnames(accusation_mismatch_summary) <- c("Attribute", "Temperature 0", "Temperature 0.25", "Temperature 0.5", "Temperature 0.75", "Temperature 1")
 ```
 
-Table X shows the structured result average number of attribute matches in temperature 0, 0.25, 0.5, 0.75 and 1. We observe a general trend of number of matches decreasing as the temperature increases. Except for 'Target', 'Profanity' and 'Obscenity' where the model performed the best under temperature 0.25 by a thin margin, the results of temperature 0 have the highest number of matches with human evaluation in every other attribute.
-
-```{r mismatchSummaryTable}
+```{r mismatchSummaryTable, include=FALSE}
 all_attr_summary <- add_row(target_mismatch_summary,targetingtype_mismatch_summary) %>%
   add_row(violence_mismatch_summary) %>%
   add_row(derogatory_mismatch_summary)%>%
@@ -355,36 +353,33 @@ all_attr_summary %>%
 ```
 
 ```{r}
-count_mismatch <- function(df, prefix) {
-  new_df <- df %>%
-  filter(gender >= 0.75 | race >= 0.75) %>%
-  group_by(index) %>%
-  summarise_if(is.numeric, sum, na.rm = TRUE)  %>%
-  select(index, starts_with("matched"))
-  colnames(new_df) <- paste(colnames(new_df), prefix,  sep = "_")
-  new_df <- rename(new_df, index = 1)
-  new_df
-}
-```
-```{r}
-count_mismatch <- function(df, temp) {
+merge_df_30n <- function(df, temp) {
   new_df <- df %>%
   filter(gender >= 0.75 | race >= 0.75) %>%
   group_by(index) %>%
   summarise_if(is.numeric, sum, na.rm = TRUE)  %>%
   select(index, starts_with("matched"))%>%
   mutate(temperature = temp) 
-  #colnames(new_df) <- paste(colnames(new_df), prefix,  sep = "_")
-  #new_df <- rename(new_df, index = 1)
   new_df
 }
-structured_a8_t0_n30_list <- count_mismatch(structured_a8_t0_n30, 0)
-structured_a8_t25_n30_list <- count_mismatch(structured_a8_t25_n30, 0.25)
-structured_a8_t50_n30_list <- count_mismatch(structured_a8_t50_n30, 0.5)
-structured_a8_t75_n30_list <- count_mismatch(structured_a8_t75_n30, 0.75)
-structured_a8_t100_n30_list <- count_mismatch(structured_a8_t100_n30, 1)
+structured_a8_t0_n30_list <- merge_df_30n(structured_a8_t0_n30, 0)
+structured_a8_t25_n30_list <- merge_df_30n(structured_a8_t25_n30, 0.25)
+structured_a8_t50_n30_list <- merge_df_30n(structured_a8_t50_n30, 0.5)
+structured_a8_t75_n30_list <- merge_df_30n(structured_a8_t75_n30, 0.75)
+structured_a8_t100_n30_list <- merge_df_30n(structured_a8_t100_n30, 1)
 structured_a8_n30_list <- rbind(structured_a8_t0_n30_list, structured_a8_t25_n30_list, structured_a8_t50_n30_list, structured_a8_t75_n30_list, structured_a8_t100_n30_list)
+
+structured_a6_t0_n30_list <- merge_df_30n(structured_a6_t0_n30, 0)
+structured_a6_t25_n30_list <- merge_df_30n(structured_a6_t25_n30, 0.25)
+structured_a6_t50_n30_list <- merge_df_30n(structured_a6_t50_n30, 0.5)
+structured_a6_t75_n30_list <- merge_df_30n(structured_a6_t75_n30, 0.75)
+structured_a6_t100_n30_list <- merge_df_30n(structured_a6_t100_n30, 1)
+structured_a6_n30_list <- rbind(structured_a6_t0_n30_list, structured_a6_t25_n30_list, structured_a6_t50_n30_list, structured_a6_t75_n30_list, structured_a6_t100_n30_list)
 ```
+
+### Number of Matched Numbers within Different Temperatures 
+
+Figure X shows the structured result average number of attribute matches in temperature 0, 0.25, 0.5, 0.75 and 1. We observe a general trend of number of matches decreasing as the temperature increases. Except for 'Target', 'Profanity' and 'Obscenity' where the model performed the best under temperature 0.25 by a thin margin, the results of temperature 0 have the highest number of matches with human evaluation in every other attribute. Moreover, as the distribution of matched number varies within wider ranges as the temperature increases.  
 
 ```{r, fig.height=4}
 p1 <- ggplot(structured_a8_n30_list, aes(factor(temperature), matched_target))
@@ -414,27 +409,29 @@ p8<- p8 + geom_boxplot()
 gridExtra::grid.arrange(p1,p2,p3,p4,p5,p6,p7,p8, ncol=2)
 ```
 
-Structured result average number of matches in ‘Insult’, ‘Derogatory’, ‘Profanity’, and ‘Obscenity’ in temperature 0, 0.25, 0.5, 0.75 and 1
+### Number of Matched Numbers within Granular Attributes V.S. General Attribute
 
-```{r insultMismatchSummaryTable}
-### Insult
-insult_a6_t0 <- count_mismatch(structured_a6_t0_n30, "matched_insult", "Temperature 0")
-insult_a6_t25 <- count_mismatch(structured_a6_t25_n30, "matched_insult", "Temperature 25")
-insult_a6_t50 <- count_mismatch(structured_a6_t50_n30, "matched_insult", "Temperature 50")
-insult_a6_t75 <- count_mismatch(structured_a6_t75_n30, "matched_insult", "Temperature 75")
-insult_a6_t100 <- count_mismatch(structured_a6_t100_n30, "matched_insult", "Temperature 100")
-insult_mismatch_summary <- add_column(Attribute = "Insult", insult_a6_t0, insult_a6_t25,insult_a6_t50,insult_a6_t75,insult_a6_t100)
-insult_mismatch_summary <- insult_mismatch_summary[ , c("Attribute", "Temperature 0", "Temperature 25", "Temperature 50", "Temperature 75", "Temperature 100")]  
-colnames(insult_mismatch_summary) <- c("Attribute", "Temperature 0", "Temperature 0.25", "Temperature 0.5", "Temperature 0.75", "Temperature 1")
+We define ‘Insult’ as a general attribute that covers ‘Derogatory’, ‘Profanity’, and ‘Obscenity’, which are what we called granular attributes. We examine how GPT-3 performs in identifying a more general attribute compared to identifying more granular attributes. Figure X shows the average numbers of matches in ‘Insult’, ‘Derogatory’, ‘Profanity’, and ‘Obscenity’ in temperature 0, 0.25, 0.5, 0.75 and 1.
 
-all_insult_attr_summary <- add_row(insult_mismatch_summary,derogatory_mismatch_summary) %>%
-  add_row(profanity_mismatch_summary) %>%
-  add_row(obscenity_mismatch_summary)
+```{r insultMismatchSummaryLineChart}
+insult_df <- add_column(structured_a6_n30_list["index"],structured_a6_n30_list["temperature"], structured_a6_n30_list["matched_insult"], structured_a8_n30_list["matched_derogatory"], structured_a8_n30_list["matched_profanity"],  structured_a8_n30_list["matched_obscenity"])
+insult_df <- insult_df %>%
+  group_by(index, temperature) %>%
+  summarise_if(is.numeric, sum, na.rm = TRUE) %>%
+  group_by(temperature) %>%
+  select(-index)%>%
+  summarise_if(is.numeric, mean, na.rm = TRUE) %>%
+  pivot_longer(!temperature, names_to = "matched_attribute", values_to = "count")  %>%
+  mutate(matched_attribute=fct_relevel(matched_attribute,c("matched_insult","matched_derogatory","matched_profanity","matched_obscenity")))  %>%
+  mutate(general = ifelse(matched_attribute =="matched_insult", "1", "0"))
 
-colnames(all_insult_attr_summary) <- c("Attribute", "Temp 0", "Temp 0.25", "Temp 0.5", "Temp 0.75", "Temp 1")
-all_insult_attr_summary %>% 
-  knitr::kable(caption = "Structured result average number of matches in 'Insult', 'Derogatory', 'Profanity', and 'Obscenity' in temperature 0, 0.25, 0.5, 0.75 and 1",
-               booktabs = TRUE)
+values = c( c(matched_insult="red"), "#a0b9e3", "#4c82df", "#0c089c")
+
+ggplot(data=insult_df, aes(x=temperature, y=count, group=matched_attribute)) +
+  geom_line(aes(color=matched_attribute)) + #, linetype=general))+
+  geom_point()+
+  scale_colour_manual(values=values)
+
 ```
 
 # Discussion
