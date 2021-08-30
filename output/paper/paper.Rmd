@@ -256,10 +256,6 @@ count_mismatch <- function(df, column_to_count, column_prefix) {
 }
 ```
 
-Count how many times Black and African American are called niggers
-Gays being called faggot
-Women being called bitches
-
 ```{r mismatchSummary}
 ### Target 
 target_a8_t0 <- count_mismatch(structured_a8_t0_n30, "matched_target", "Temperature 0")
@@ -342,7 +338,7 @@ accusation_mismatch_summary <- accusation_mismatch_summary[ , c("Attribute", "Te
 colnames(accusation_mismatch_summary) <- c("Attribute", "Temperature 0", "Temperature 0.25", "Temperature 0.5", "Temperature 0.75", "Temperature 1")
 ```
 
-Table X shows the structured result average number of attribute matches in temperature 0, 0.25, 0.5, 0.75 and 1. We observe a general trend of decreasing number of matches as the temperature increases. Except for 'Profanity' and 'Obscenity', the results of temperature 0 have the highest number of matches with human evaluation in every attribute.
+Table X shows the structured result average number of attribute matches in temperature 0, 0.25, 0.5, 0.75 and 1. We observe a general trend of number of matches decreasing as the temperature increases. Except for 'Target', 'Profanity' and 'Obscenity' where the model performed the best under temperature 0.25 by a thin margin, the results of temperature 0 have the highest number of matches with human evaluation in every other attribute.
 
 ```{r mismatchSummaryTable}
 all_attr_summary <- add_row(target_mismatch_summary,targetingtype_mismatch_summary) %>%
@@ -356,6 +352,66 @@ colnames(all_attr_summary) <- c("Attribute", "Temp 0", "Temp 0.25", "Temp 0.5", 
 all_attr_summary %>% 
   knitr::kable(caption = "Structured result average number of attribute matches in temperature 0, 0.25, 0.5, 0.75 and 1",
                booktabs = TRUE)
+```
+
+```{r}
+count_mismatch <- function(df, prefix) {
+  new_df <- df %>%
+  filter(gender >= 0.75 | race >= 0.75) %>%
+  group_by(index) %>%
+  summarise_if(is.numeric, sum, na.rm = TRUE)  %>%
+  select(index, starts_with("matched"))
+  colnames(new_df) <- paste(colnames(new_df), prefix,  sep = "_")
+  new_df <- rename(new_df, index = 1)
+  new_df
+}
+```
+```{r}
+count_mismatch <- function(df, temp) {
+  new_df <- df %>%
+  filter(gender >= 0.75 | race >= 0.75) %>%
+  group_by(index) %>%
+  summarise_if(is.numeric, sum, na.rm = TRUE)  %>%
+  select(index, starts_with("matched"))%>%
+  mutate(temperature = temp) 
+  #colnames(new_df) <- paste(colnames(new_df), prefix,  sep = "_")
+  #new_df <- rename(new_df, index = 1)
+  new_df
+}
+structured_a8_t0_n30_list <- count_mismatch(structured_a8_t0_n30, 0)
+structured_a8_t25_n30_list <- count_mismatch(structured_a8_t25_n30, 0.25)
+structured_a8_t50_n30_list <- count_mismatch(structured_a8_t50_n30, 0.5)
+structured_a8_t75_n30_list <- count_mismatch(structured_a8_t75_n30, 0.75)
+structured_a8_t100_n30_list <- count_mismatch(structured_a8_t100_n30, 1)
+structured_a8_n30_list <- rbind(structured_a8_t0_n30_list, structured_a8_t25_n30_list, structured_a8_t50_n30_list, structured_a8_t75_n30_list, structured_a8_t100_n30_list)
+```
+
+```{r, fig.height=4}
+p1 <- ggplot(structured_a8_n30_list, aes(factor(temperature), matched_target))
+p1 <- p1 + geom_boxplot()
+
+p2 <- ggplot(structured_a8_n30_list, aes(factor(temperature), matched_targeting_type))
+p2 <- p2 + geom_boxplot()
+
+p3 <- ggplot(structured_a8_n30_list, aes(factor(temperature), matched_violence))
+p3 <- p3 + geom_boxplot()
+
+p4 <- ggplot(structured_a8_n30_list, aes(factor(temperature), matched_derogatory))
+p4 <- p4 + geom_boxplot()
+
+p5 <- ggplot(structured_a8_n30_list, aes(factor(temperature), matched_profanity))
+p5<- p5 + geom_boxplot()
+
+p6 <- ggplot(structured_a8_n30_list, aes(factor(temperature), matched_obscenity))
+p6<- p6 + geom_boxplot()
+
+p7 <- ggplot(structured_a8_n30_list, aes(factor(temperature), matched_rejection))
+p7<- p7 + geom_boxplot()
+
+p8 <- ggplot(structured_a8_n30_list, aes(factor(temperature), matched_accusation))
+p8<- p8 + geom_boxplot()
+
+gridExtra::grid.arrange(p1,p2,p3,p4,p5,p6,p7,p8, ncol=2)
 ```
 
 Structured result average number of matches in ‘Insult’, ‘Derogatory’, ‘Profanity’, and ‘Obscenity’ in temperature 0, 0.25, 0.5, 0.75 and 1
