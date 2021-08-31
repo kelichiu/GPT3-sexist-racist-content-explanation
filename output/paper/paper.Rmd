@@ -58,66 +58,60 @@ GPT-3 is groundbreaking for a few reasons. First of all, GPT-3 are not specializ
 
 # Methods
 
-1 annotator
-
 ## Dataset: Ethos Hate Speech Dataset
-Two formats: open-ended and structured. 
+
+**Describe how we retrieve sexist and racist data from the data set and how many samples we obtained** 
+
+ * What data are included
+ 
+ * What data are excluded: Unclear target or targeting type is not included. Supremacy is not included.
+
+## Response Collection
+
+* OpenAI API
+
+* Model: Davinci
+
+* Hyper-parameters
+
+* Sample size
+
+## Generation Formats
+
+**What is open-ended format**
+
+  * What's the prompt example: Appendix X.
+  
+  * What are the metrics we used to evaluate the generations
 
 Because GPT-3’s responses can be very different each time, we prompt GPT-3 five times for each example to help us examine the variety of the responses and also increase the chance of getting a reasonable response.
 
+Metrics: Reasoning adequacy, target identification, and presence of made-up details.
+
+**What is structured format** 
+
+  * What's the prompt example: Appendix X.
+  
+  * What are the metrics we used to evaluate the generations
+  
 Structured: We come up with a set of attributes such as targets, the presence of violence, derogatory, and profanity. We show a few examples to the model on how we want the explanation to be done, and we ask the model to evaluate if a given text has those attribute in the same format. 
 
 Eight attributes: target, targeting type, derogatory, profanity, obscenity, violence, rejection, and accusation. 
 Offensive language 
 
+Metrics: matches of attributes with human labelling.
+
+## Human Labelling
+
+**Describe how human labelling is proceed**
+
+  * number of annotator
+
+  * definition of all attributes
+
 Violence: inciting violence towards the target. Mentioning violence from other event does not count. 
 Rejection: explicit expression of not wanting the presence or existence of a target. 
 Accusation: accusing the target of misconducts of mischievous behaviours.  
-
-Unclear target or targeting type is not included.
-Supremacy is not included.
-
-## Open-Ended Prompts
-
-Prompt:
-
-> Q: Is the following text in quotes sexist? Answer yes or no and explain why.
->
-> '''If men shouldnt hit women because we are physically stronnger... then women shouldnt talk because they are fucking louder.'''
->
-> A: 
-
-GPT-3 response: 
-
-> Yes this is sexist. This statement is using the stereotypical gender roles of men and women to justify why it is ok for men to hit women but it is not ok for women to speak. Men are seen as physically stronger and women are seen as the loud, screeching sex. This is a perfect example of the sexism in our society.
-
-## Structured Prompts
-
-### Eight Attributes
-
-> '''What about a global massacre of men? Pussiezzz only girls'''
->
-> [target: men | targeting type: gender| violence: yes | insult: yes | rejection: no | accusation: no]
->
-> '''kill all the african american monkeys'''
->
-> [target: african american | targeting type: race| violence: yes | insult: yes | rejection: no | accusation: no]
->
-> '''Women are made for making babies and cooking dinner and nothing else!!!'''
->
-> [target: women | targeting type: gender| violence: no | insult: yes | rejection: no | accusation: no]
->
-> '''The world would be better without white people because they stole from the black Egyptians in the before christ ages they was poor we wasnt whites  ruins everything for black people/White people have pig dicks and no shape no hips or no booty they have to get plastic surgery as us blacks get it from our mother whites brought skin cancer to america so learn some facts before you try to run us out america when we was here before yall racist ass smelly crackers and dont say you will beat my ass because you cant and if you wanna find out drop your adress‚'''
->
-> [target: white | targeting type: race| violence: yes | insult: yes| rejection: yes | accusation: yes]
->
-> '''You should know women's sports are a joke'''
->
-> [
-
-GPT-3 response: 
-
-> target: women's sports | targeting type: gender| violence: no | derogatory: yes | profanity: no | obscenities: no | rejection: no | accusation: no
 
 # Results
 
@@ -195,7 +189,6 @@ open_ended_results_reason %>%
   knitr::kable(caption = "Open-ended result reasoning level counts",
                booktabs = TRUE)
 ```
-
 
 ### Target Identification and Made-Up Details
 
@@ -338,20 +331,6 @@ accusation_mismatch_summary <- accusation_mismatch_summary[ , c("Attribute", "Te
 colnames(accusation_mismatch_summary) <- c("Attribute", "Temperature 0", "Temperature 0.25", "Temperature 0.5", "Temperature 0.75", "Temperature 1")
 ```
 
-```{r mismatchSummaryTable, include=FALSE}
-all_attr_summary <- add_row(target_mismatch_summary,targetingtype_mismatch_summary) %>%
-  add_row(violence_mismatch_summary) %>%
-  add_row(derogatory_mismatch_summary)%>%
-  add_row(profanity_mismatch_summary)%>%
-  add_row(obscenity_mismatch_summary)%>%
-  add_row(rejection_mismatch_summary)%>%
-  add_row(accusation_mismatch_summary)
-colnames(all_attr_summary) <- c("Attribute", "Temp 0", "Temp 0.25", "Temp 0.5", "Temp 0.75", "Temp 1")
-all_attr_summary %>% 
-  knitr::kable(caption = "Structured result average number of attribute matches in temperature 0, 0.25, 0.5, 0.75 and 1",
-               booktabs = TRUE)
-```
-
 ```{r}
 merge_df_30n <- function(df, temp) {
   new_df <- df %>%
@@ -381,7 +360,7 @@ structured_a6_n30_list <- rbind(structured_a6_t0_n30_list, structured_a6_t25_n30
 
 Figure X shows the structured result average number of attribute matches in temperature 0, 0.25, 0.5, 0.75 and 1. We observe a general trend of number of matches decreasing as the temperature increases. Except for 'Target', 'Profanity' and 'Obscenity' where the model performed the best under temperature 0.25 by a thin margin, the results of temperature 0 have the highest number of matches with human evaluation in every other attribute. Moreover, as the distribution of matched number varies within wider ranges as the temperature increases.  
 
-```{r, fig.height=4}
+```{r, fig.height=7}
 p1 <- ggplot(structured_a8_n30_list, aes(factor(temperature), matched_target))
 p1 <- p1 + geom_boxplot()
 
@@ -409,11 +388,38 @@ p8<- p8 + geom_boxplot()
 gridExtra::grid.arrange(p1,p2,p3,p4,p5,p6,p7,p8, ncol=2)
 ```
 
+### Comparison of All Attributes
+
+The descriptive summary is conducted and shown in Table X to assess the model' overall performances in each attribute. The results show that the model performs the best in identifying the identity categories (gender, race...etc) a sexist or racist text is targeting (sex, gender, race, origin...etc). Second to the targeting type, the model also performs well in identifying who the target is (women, African Americans...etc). The model seems to have varied capabilities in identifying the presence of violence, derogatory, profanity, obscenity, rejection, and accusation in the texts. 
+
+```{r matchSummaryTable}
+all_attr_summary <- add_row(target_mismatch_summary,targetingtype_mismatch_summary) %>%
+  add_row(violence_mismatch_summary) %>%
+  add_row(derogatory_mismatch_summary)%>%
+  add_row(profanity_mismatch_summary)%>%
+  add_row(obscenity_mismatch_summary)%>%
+  add_row(rejection_mismatch_summary)%>%
+  add_row(accusation_mismatch_summary)
+colnames(all_attr_summary) <- c("Attribute", "Temp 0", "Temp 0.25", "Temp 0.5", "Temp 0.75", "Temp 1")
+rownames(all_attr_summary) <- all_attr_summary$Attribute
+
+all_attr_summary_t <- t(all_attr_summary)
+
+rownames(all_attr_summary_t) <- colnames(all_attr_summary)
+colnames(all_attr_summary_t) <- rownames(all_attr_summary)
+all_attr_summary_t <- as.data.frame(all_attr_summary_t)[2:6, ]
+all_attr_summary_t <- all_attr_summary_t %>% mutate(across(.fns = type.convert))
+
+summary(all_attr_summary_t) %>% 
+  knitr::kable(caption = "Structured results attribute matches descriptive data",
+               booktabs = TRUE)
+```
+
 ### Number of Matched Numbers within Granular Attributes V.S. General Attribute
 
-We define ‘Insult’ as a general attribute that covers ‘Derogatory’, ‘Profanity’, and ‘Obscenity’, which are what we called granular attributes. We examine how GPT-3 performs in identifying a more general attribute compared to identifying more granular attributes. Figure X shows the average numbers of matches in ‘Insult’, ‘Derogatory’, ‘Profanity’, and ‘Obscenity’ in temperature 0, 0.25, 0.5, 0.75 and 1.
+We define ‘Insult’ as a general attribute that encompasses ‘Derogatory’, ‘Profanity’, and ‘Obscenity’, which are what we called granular attributes. We examine how GPT-3 performs in identifying a more general attribute compared to identifying more granular attributes. Figure X shows the average numbers of matches in ‘Insult’, ‘Derogatory’, ‘Profanity’, and ‘Obscenity’ in temperature 0, 0.25, 0.5, 0.75 and 1. The results reveals that the model performs better with identifying general attributes compared to granular attributes. 
 
-```{r insultMismatchSummaryLineChart}
+```{r insultMismatchSummaryLineChart, fig.height=3}
 insult_df <- add_column(structured_a6_n30_list["index"],structured_a6_n30_list["temperature"], structured_a6_n30_list["matched_insult"], structured_a8_n30_list["matched_derogatory"], structured_a8_n30_list["matched_profanity"],  structured_a8_n30_list["matched_obscenity"])
 insult_df <- insult_df %>%
   group_by(index, temperature) %>%
@@ -425,7 +431,7 @@ insult_df <- insult_df %>%
   mutate(matched_attribute=fct_relevel(matched_attribute,c("matched_insult","matched_derogatory","matched_profanity","matched_obscenity")))  %>%
   mutate(general = ifelse(matched_attribute =="matched_insult", "1", "0"))
 
-values = c( c(matched_insult="red"), "#a0b9e3", "#4c82df", "#0c089c")
+values = c( c(matched_insult="orange"), "#a0b9e3", "#4c82df", "#0c089c")
 
 ggplot(data=insult_df, aes(x=temperature, y=count, group=matched_attribute)) +
   geom_line(aes(color=matched_attribute)) + #, linetype=general))+
@@ -452,5 +458,54 @@ This approach actually permits the model to detect problematic texts beyond the 
 
 Explainable AI is an approach that’s been very popular to tackle the black box problem in AI decision making. Often times, we have hard time to understand why AI makes the decision it makes, and there’s no way to deconstruct it. Explainable AI is the approach of that decision making process auditable and transparent. Why we do is not explainable AI because the explanations on why a text passage is sexist or racist provided by GPT-3 are from a social lense, and are not shedding a light on any technical or system process for the output. In other words, the explanations displayed are not the rationale GPT-3 made the decisions based on. GPT-3 is saying that the text is sexist or racist because of the math behind the model, not because of the explanations it generated. 
 
+\newpage
+
+\appendix
+
+# Appendix {-}
+
+## Open-Ended Prompts
+
+Prompt:
+
+> Q: Is the following text in quotes sexist? Answer yes or no and explain why.
+>
+> '''If men shouldnt hit women because we are physically stronnger... then women shouldnt talk because they are fucking louder.'''
+>
+> A: 
+
+GPT-3 response: 
+
+> Yes this is sexist. This statement is using the stereotypical gender roles of men and women to justify why it is ok for men to hit women but it is not ok for women to speak. Men are seen as physically stronger and women are seen as the loud, screeching sex. This is a perfect example of the sexism in our society.
+
+## Structured Prompts
+
+### Eight Attributes
+
+> '''What about a global massacre of men? Pussiezzz only girls'''
+>
+> [target: men | targeting type: gender| violence: yes | insult: yes | rejection: no | accusation: no]
+>
+> '''kill all the african american monkeys'''
+>
+> [target: african american | targeting type: race| violence: yes | insult: yes | rejection: no | accusation: no]
+>
+> '''Women are made for making babies and cooking dinner and nothing else!!!'''
+>
+> [target: women | targeting type: gender| violence: no | insult: yes | rejection: no | accusation: no]
+>
+> '''The world would be better without white people because they stole from the black Egyptians in the before christ ages they was poor we wasnt whites  ruins everything for black people/White people have pig dicks and no shape no hips or no booty they have to get plastic surgery as us blacks get it from our mother whites brought skin cancer to america so learn some facts before you try to run us out america when we was here before yall racist ass smelly crackers and dont say you will beat my ass because you cant and if you wanna find out drop your adress‚'''
+>
+> [target: white | targeting type: race| violence: yes | insult: yes| rejection: yes | accusation: yes]
+>
+> '''You should know women's sports are a joke'''
+>
+> [
+
+GPT-3 response: 
+
+> target: women's sports | targeting type: gender| violence: no | derogatory: yes | profanity: no | obscenities: no | rejection: no | accusation: no
+
+\newpage
 
 # References
