@@ -487,7 +487,33 @@ GPT-3 response:
 
 ## Structured Prompts
 
-### Eight Attributes
+**Eight Attributes**
+
+> '''What about a global massacre of men? Pussiezzz only girls'''
+>
+> [target: men | targeting type: gender| violence: yes | derogatory: yes | profanity: yes | obscenity: yes | rejection: no | accusation: no]
+>
+> '''kill all the african american monkeys'''
+>
+> [target: african american | targeting type: race| violence: yes | derogatory: yes | profanity: no | obscenity: no | rejection: no | accusation: no]
+>
+> '''Women are made for making babies and cooking dinner and nothing else!!!'''
+>
+> [target: women | targeting type: gender| violence: no | derogatory: yes | profanity: no | obscenity: no | rejection: no | accusation: no]
+>
+> '''The world would be better without white people because they stole from the black Egyptians in the before christ ages they was poor we wasnt whites  ruins everything for black people/White people have pig dicks and no shape no hips or no booty they have to get plastic surgery as us blacks get it from our mother whites brought skin cancer to america so learn some facts before you try to run us out america when we was here before yall racist ass smelly crackers and dont say you will beat my ass because you cant and if you wanna find out drop your adress‚'''
+>
+> [target: white | targeting type: race| violence: yes | derogatory: yes | profanity: yes | obscenity: no | rejection: yes | accusation: yes]
+>
+> '''You should know women's sports are a joke'''
+>
+> [
+
+GPT-3 response: 
+
+> target: women's sports | targeting type: gender| violence: no | derogatory: yes | profanity: no | obscenities: no | rejection: no | accusation: no
+
+**Six Attributes**
 
 > '''What about a global massacre of men? Pussiezzz only girls'''
 >
