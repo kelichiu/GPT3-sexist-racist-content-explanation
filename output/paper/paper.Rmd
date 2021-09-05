@@ -42,7 +42,7 @@ library(readr)
 Large language models such as GPT-3 have the capacity to generate texts that are indistinguishable from human creation. In our previous study, we observed that GPT-3 the model's accuracy in detection sexist or racist text contents can be as high as 78 per cent [**cite our own paper**]. In this study, we aim to assess GPT-3 ability to generate explanations on why given text contents are sexist or racist. We are interested in language models' ability in generating explanations because explanations play a crucial role in trust [@pieters2011explanation]. Trust is an essential factor for acceptance, which can shape the interaction between human and technology [@siau2018building]. 
 
 However, out approach is not to be mistaken from Explainable AI. Explainable AI is an approach that aims to  tackle the black box problem in AI decision making by making the decision making process auditable and transparent [**Citation**]. The explanations we prompt GPT-3 to produce are to be interpreted solely from a social lense, and are not shedding a light on the technical or algorithmic process of the generation. In other words, the model's decision on if a given text is sexist or racist does not depend on the explanation in generates. In fact, we have observed the model generating contradicting explanations to its own determination, discussed in the later section. 
-However, our approach does have overlapping **contributions?** with Explainable AI. **What are the overlaps: meaningful, wrap it back to trust**Can still assist human in decision making. 
+However, our approach does have overlapping **contributions?** with Explainable AI. **What are the overlaps: meaningful, wrap it back to trust**. **How can the explanations still assist human in decision making.**
 
 In our study, we examine GPT-3's ability to generate explanations for why a given text is sexist or racist. We prompt GPT-3 to generate explanations in two approaches: open-ended and structured. In the open-ended method, GPT-3 is prompted to produce explanations on why a given text is sexist or racist in a question-answering manner. On the other hand, the model generates explanations following a given pattern under the structured method. We then assess the adequacy of the generated explanations to see if the model is fit for explaining why a given text is sexist or racist.
 
@@ -67,11 +67,11 @@ Machine generation of open-ended explanation on sexist texts found in forums [**
 
 ## Dataset: Ethos Hate Speech Dataset
 
-**Describe how we retrieve sexist and racist data from the data set and how many samples we obtained** 
+We use the ETHOS dataset created by @mollas2020ethos. ETHOS is based on comments found in YouTube and Reddit. The ETHOS YouTube data is collected through Hatebusters [@anagnostou2018hatebusters]. Hatebusters is a platform that collects comments from YouTube and assigns a 'hate' score to them using a support vector machine. The Reddit data is collected from the Public Reddit Data Repository [@baumgartner2020pushshift]. The dataset has two variants: binary and multi-label. In the binary dataset comments are classified as hate or non-hate. In the multi-label variant, the comments are evaluated on measures that include violence, gender, race, ability, religion, and sexual orientation. The examples provided in this paper are from the ETHOS dataset and hence contain typos, misspelling, and offensive content.
 
- * What data are included
- 
- * What data are excluded: Unclear target or targeting type is not included. Supremacy is not included.
+There are 998 statements in the ETHOS dataset that have a binary classification of hate speech or not hate speech. Of these, the 433 statements that contain hate speech additionally have multiple labels that classify the content, for instance, does the comment have to do with violence, gender, race, nationality, disability, etc. We considered the **X** statements that contain race-based hate speech, and we focus on the **X** whose race-based score is at least 0.75. Similarly, we considered the **X** statements that contain gender-based hate speech, and again focused on the **X** whose gender-based score is at least 0.75. 
+
+A human annotator evaluates the comments and extracts the following attributes from them — target, targeting type, violence, derogatory, profanity, obscenity, rejection, and accusation. Comments that have unclear target or targeting type are not included. The final dataset contains **X** comments. 
 
 ## Response Collection
 
