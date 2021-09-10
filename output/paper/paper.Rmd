@@ -51,7 +51,8 @@ In our study, we examine GPT-3's ability to generate explanations for why a give
 
 ## GPT-3
 
-GPT-3 is the third generation of the GPT model created by OpenAI [@brown2020language]. Compared to the language models before GPT-3, GPT-3 is considered groundbreaking for a few reasons. First, GPT-3 is not specialized in one or just a few tasks, but a generalist that can be trained in doing all kinds of tasks. Second, it learns like human do. Given only a few examples, GPT-3 can pick up the patterns in the examples, and produce the results following the given patterns. Third, the examples and instructions fed to the model are expressed in natural language. In other words, it is programming with plain language instead of code. Lastly, the model generates the text quickly and fluently, and the generated contents are hard to be distinguished from human creation. As to date this paper is written, GPT-3 is not open to the public, and only selected users are granted the access through OpenAI API. Not only GPT-3, large language models with competing scales such as Google G-Shard and G-Switch are as well not accessible to the public. **What are the concerns, potential dangers, and what should be done**
+GPT-3 is the third generation of the GPT model created by OpenAI [@brown2020language]. Compared to the language models before GPT-3, GPT-3 is considered groundbreaking for a few reasons. First, GPT-3 is not specialized in one or just a few tasks, but a generalist that can be trained in doing all kinds of tasks. Second, it learns like human do. Given only a few examples, GPT-3 can pick up the patterns in the examples, and produce the results following the given patterns. Third, the examples and instructions fed to the model are expressed in natural language. In other words, it is programming with plain language instead of code. Lastly, the model generates the text quickly and fluently, and the generated contents are hard to be distinguished from human creation. Because of these powerful characteristics of this technology, researchers are wary that large language models will be used to generate misinformation at large scale [@bender2021dangers]. Besides GPT-3, large language models with competing scales such as Google G-Shard [**citation**] and G-Switch [**citation**] are as well not accessible to the public. As to date this paper is written, GPT-3 is not open to the public, and only selected users are granted the access through OpenAI API.
+
 
 ## Sexist and Racist Text Detection
 
@@ -74,48 +75,23 @@ There are 998 statements in the ETHOS dataset that have a binary classification 
 
 A human annotator evaluates the comments and extracts the following attributes from them — target, targeting type, violence, derogatory, profanity, obscenity, rejection, and accusation. Comments that have unclear target or targeting type are not included. The final dataset contains **X** comments. 
 
-## Response Collection
+## Data Collection
 
-* OpenAI API
+The data is collected from prompting GPT-3 (Davinci model) in giving explanations through OpenAI API. We modified the following hyper-parameters for desired outputs — ”temperature”, “stop”, “n”, and “max_tokens”. “temperature” determines how creative the response will be. The minimum value is 0 (conservative) and the maximum is 1 (creative). For open-ended responses, the temperature is set to 0.7 in our study for GPT-3 to obtain some creative liberty to generate open-ended responses. We set the “stop” parameter to “Q:”, which means the generation will stop before the model generates another question, in case the model follows the pattern and attempts to generate another similar question after the answer. “n” is the number of responses generated, which is set to 5. 
 
-* Model: Davinci
+Because GPT-3’s responses in an open-ended format can be very different each time, we prompt GPT-3 five times for each example to help us examine the variety of the responses and also increase the chance of getting a reasonable responses. “max_tokens”  is the maximum length of each response, which is set to 120. The goal of the prompt is to have the model answers "yes" or "no", then generates explanations within 120 words in free form. The prompts are formulated in a question-answering format. We start the prompt by “Q: ” and place the question in the following sentence to ask the model to explain why the provided example is sexist or not sexist. Following the question is the provided example wrapped in quotes. We then end the prompt with “A: ”, so the model will generate the response as an answer to the question. The example of an open-ended prompt can be found in **Appendix X**. This process is repeated until all the examples are given an explanation of why it is sexist or not, and the total number of collected responses in open-ended format is **X**.
 
-* Hyper-parameters
+For structured responses, the prompt contains two examples of sexists texts and two examples of racist texts. The examples demonstrate the desired patterns we want GPT-3 to follow, which is answering "yes" or "no" to a number of preset attributes under a given text. The attributes are target, targeting type, derogatory, profanity, obscenity, violence, rejection, and accusation. We aim to evaluate GPT-3's ability to identify who the target is, what they're targeted based on, and the presence of the characteristics of abusive content. The example of the structured prompt can be found in **Appendix X**. The temperature is iterated through five different values — 0, 0.25, 0.5, 0.75, and 1, so we can observe the performance of the model under different temperature. The "stop" parameter is set to "]", which is a closing bracket corresponding to the opening bracket in the prompt signaling the end of a generation. For each given text, we ask the model to generate 30 responses, and the total number of collected responses in structured format is **X**. We then repeated the process with three of the attributes combining to one. "derogatory", "profanity" and "obscenity" are merged into "insult". The objective is to compare GPT-3's ability in detecting granular attributes versus a general attribute. The example of the structured prompt with reduced attributes can be found in **Appendix X**.
 
-* Sample size: 5 generations per comment in open-ended format. 30 generations per comments in structured format.
-
-## Generation Formats
-
-**What is open-ended format**
-
-  * What's the prompt example: Appendix X.
-  
-  * What are the metrics we used to evaluate the generations
-
-Because GPT-3’s responses can be very different each time, we prompt GPT-3 five times for each example to help us examine the variety of the responses and also increase the chance of getting a reasonable response.
-
-Metrics: Reasoning adequacy, target identification, and presence of made-up details.
-
-**What is structured format** 
-
-  * What's the prompt example: Appendix X.
-  
-  * What are the metrics we used to evaluate the generations
-  
-Structured: We come up with a set of attributes such as targets, the presence of violence, derogatory, and profanity. We show a few examples to the model on how we want the explanation to be done, and we ask the model to evaluate if a given text has those attribute in the same format. 
-
-Eight attributes: target, targeting type, derogatory, profanity, obscenity, violence, rejection, and accusation. 
-Offensive language 
-
-Metrics: matches of attributes with human labelling.
-
-## Human Labelling
+## Human Evaluation
 
 **Describe how human labelling is proceed**
 
   * number of annotator
 
   * definition of all attributes
+  
+  Metrics: Reasoning adequacy, target identification, and presence of made-up details.
 
 Violence: inciting violence towards the target. Mentioning violence from other event does not count. 
 Rejection: explicit expression of not wanting the presence or existence of a target. 
@@ -465,6 +441,8 @@ This approach actually permits the model to detect problematic texts beyond the 
 **Why this is not Explainable AI**
 
 Explainable AI is an approach that’s been very popular to tackle the black box problem in AI decision making. Often times, we have hard time to understand why AI makes the decision it makes, and there’s no way to deconstruct it. Explainable AI is the approach of that decision making process auditable and transparent. Why we do is not explainable AI because the explanations on why a text passage is sexist or racist provided by GPT-3 are from a social lense, and are not shedding a light on any technical or system process for the output. In other words, the explanations displayed are not the rationale GPT-3 made the decisions based on. GPT-3 is saying that the text is sexist or racist because of the math behind the model, not because of the explanations it generated. 
+
+    **The example of contradicting explanation**
 
 \newpage
 
