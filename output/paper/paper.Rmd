@@ -77,25 +77,33 @@ A human annotator evaluates the comments and extracts the following attributes f
 
 ## Data Collection
 
-The data is collected from prompting GPT-3 (Davinci model) in giving explanations through OpenAI API. We modified the following hyper-parameters for desired outputs — ”temperature”, “stop”, “n”, and “max_tokens”. “temperature” determines how creative the response will be. The minimum value is 0 (conservative) and the maximum is 1 (creative). For open-ended responses, the temperature is set to 0.7 in our study for GPT-3 to obtain some creative liberty to generate open-ended responses. We set the “stop” parameter to “Q:”, which means the generation will stop before the model generates another question, in case the model follows the pattern and attempts to generate another similar question after the answer. “n” is the number of responses generated, which is set to 5. 
+The data is collected from prompting GPT-3 (Davinci model) in giving explanations through OpenAI API. We modified the following hyper-parameters for desired outputs — `temperature`, `stop`, `n`, and `max_tokens`. `temperature` determines how creative the response will be. The minimum value is 0 (conservative) and the maximum is 1 (creative). For open-ended responses, the temperature is set to 0.7 in our study for GPT-3 to obtain some creative liberty to generate open-ended responses. We set the `stop` parameter to "Q:", which means the generation will stop before the model generates another question, in case the model follows the pattern and attempts to generate another similar question after the answer. “n” is the number of responses generated, which is set to 5. 
 
-Because GPT-3’s responses in an open-ended format can be very different each time, we prompt GPT-3 five times for each example to help us examine the variety of the responses and also increase the chance of getting a reasonable responses. “max_tokens”  is the maximum length of each response, which is set to 120. The goal of the prompt is to have the model answers "yes" or "no", then generates explanations within 120 words in free form. The prompts are formulated in a question-answering format. We start the prompt by “Q: ” and place the question in the following sentence to ask the model to explain why the provided example is sexist or not sexist. Following the question is the provided example wrapped in quotes. We then end the prompt with “A: ”, so the model will generate the response as an answer to the question. The example of an open-ended prompt can be found in **Appendix X**. This process is repeated until all the examples are given an explanation of why it is sexist or not, and the total number of collected responses in open-ended format is **X**.
+Because GPT-3’s responses in an open-ended format can be very different each time, we prompt GPT-3 five times for each example to help us examine the variety of the responses and also increase the chance of getting a reasonable responses. “max_tokens”  is the maximum length of each response, which is set to 120. The goal of the prompt is to have the model answers "yes" or "no", then generates explanations within 120 words in free form. The prompts are formulated in a question-answering format. We start the prompt by “Q: ” and place the question in the following sentence to ask the model to explain why the provided example is sexist or not sexist. Following the question is the provided example wrapped in quotes. We then end the prompt with "A:", so the model will generate the response as an answer to the question. The example of an open-ended prompt can be found in **Appendix X**. This process is repeated until all the examples are given an explanation of why it is sexist or not, and the total number of collected responses in open-ended format is **X**.
 
 For structured responses, the prompt contains two examples of sexists texts and two examples of racist texts. The examples demonstrate the desired patterns we want GPT-3 to follow, which is answering "yes" or "no" to a number of preset attributes under a given text. The attributes are target, targeting type, derogatory, profanity, obscenity, violence, rejection, and accusation. We aim to evaluate GPT-3's ability to identify who the target is, what they're targeted based on, and the presence of the characteristics of abusive content. The example of the structured prompt can be found in **Appendix X**. The temperature is iterated through five different values — 0, 0.25, 0.5, 0.75, and 1, so we can observe the performance of the model under different temperature. The "stop" parameter is set to "]", which is a closing bracket corresponding to the opening bracket in the prompt signaling the end of a generation. For each given text, we ask the model to generate 30 responses, and the total number of collected responses in structured format is **X**. We then repeated the process with three of the attributes combining to one. "derogatory", "profanity" and "obscenity" are merged into "insult". The objective is to compare GPT-3's ability in detecting granular attributes versus a general attribute. The example of the structured prompt with reduced attributes can be found in **Appendix X**.
 
 ## Human Evaluation
 
-**Describe how human labelling is proceed**
+The model-generated responses are then evaluated by a human annotator. The open-ended responses with three attributes — target identification, presence of made-up details, and reasoning adequacy. Target identification and presence of made-up details are binary evaluation that simply indicate if the model has identified the target of the sexist or racist content or has made up details in the generated explanations. The reasoning adequacy of each explanations are categorized as follows: no explanation, false explanation, insufficient explanation, complete explanation, and complete explanation with over-reaching explanation. 
 
-  * number of annotator
+For the structured responses, the human annotator evaluates the given texts by the same set of attributes — target, targeting type, violence, derogatory, profanity, obscenity, rejection, and accusation. The guidelines for labeling are as follows:
 
-  * definition of all attributes
+  * Target: the annotator is free to list none, one, more multiple targets based on their judgment. Although the examples are focus on targets whose identities are based on gender or race, the annotator is not limited to these options. 
+
+  * Targeting type: similar to identifying targets, the annotator is also free to label the targeting type beyond to scope of gender or race.
   
-  Metrics: Reasoning adequacy, target identification, and presence of made-up details.
-
-Violence: inciting violence towards the target. Mentioning violence from other event does not count. 
-Rejection: explicit expression of not wanting the presence or existence of a target. 
-Accusation: accusing the target of misconducts of mischievous behaviours.  
+  * Violence: The human annotator will only flag the presence of violence if the given text is inciting violence towards the target. Mentioning of a violent event is not considered presence of violence. 
+  
+  * Derogatory: **Belittling, diminishing**  
+  
+  * Profanity: **swear words, slur, vulgar** 
+  
+  * Obscenity: **sexual, body parts**
+  
+  * Rejection: **explicit expression of not wanting the presence or existence of a target.** 
+  
+  * Accusation: **Accusing the target of misconducts of mischievous behaviours.**  
 
 # Results
 
