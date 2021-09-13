@@ -86,21 +86,21 @@ The model-generated responses are then evaluated by a human annotator. The open-
 
 For the structured responses, the human annotator evaluates the given texts by the same set of attributes — target, targeting type, violence, derogatory, profanity, obscenity, rejection, and accusation. The guidelines for labeling are as follows:
 
-  * Target: the annotator is free to list none, one, more multiple targets based on their judgment. Although the examples are focus on targets whose identities are based on gender or race, the annotator is not limited to these options. 
+  * Target: The annotator is free to list none, one, more multiple targets based on their judgment. Although the examples are focus on targets whose identities are based on gender or race, the annotator is not limited to these options. 
 
-  * Targeting type: similar to identifying targets, the annotator is also free to label the targeting type beyond to scope of gender or race.
+  * Targeting type: Similar to identifying targets, the annotator is also free to label the targeting type beyond to scope of gender or race.
   
   * Violence: The human annotator will only flag the presence of violence if the given text is inciting violence towards the target. Mentioning of a violent event is not considered presence of violence. 
   
-  * Derogatory: **Belittling, diminishing**  
+  * Derogatory: Belittling, demeaning, or degrading a target in a given text.
   
-  * Profanity: If the given text contains any swear words or curse words. For example
+  * Profanity: If a given text contains any swear words or curse words such as f*** or s***, the presence of profanity should be labelled.  
   
-  * Obscenity: **contains depiction of nudity, sex, or excretion is patently offensive and without artistic or scientific value.**
+  * Obscenity: Presence of obscenity should be flagged if a given text contains depiction of nudity, sex, or excretion is patently offensive and without artistic or scientific value.
   
   * Rejection: The human annotator will flag the presence of rejection if the given text contains the author's explicit expression of not wanting the presence or existence of a target. 
   
-  * Accusation: The author's accuses its target of misconducts of mischievous behaviours with generalization without evidence. For example, ""
+  * Accusation: The author's accuses its target of misconducts of mischievous behaviours with generalization without evidence. 
 
 # Results
 
@@ -214,8 +214,6 @@ open_ended_results_madeup_details %>%
 ```
 
 ## Structured Responses
-
-30 generations per comment. 
 
 ```{r}
 structured_a8_t0_n30 <- read.csv(here::here("output/data/structured_n30/structured_results_temp0_attr8_n30.csv"))
