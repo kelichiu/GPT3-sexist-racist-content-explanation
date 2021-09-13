@@ -41,11 +41,11 @@ library(readr)
 
 Large language models such as GPT-3 have the capacity to generate texts that are indistinguishable from human creation. In our previous study, we observed that GPT-3 the model's accuracy in detection sexist or racist text contents can be as high as 78 per cent [**cite our own paper**]. The importance of explanation in AI has been emphasized in numerous popular press outlets over the past decades [@mueller2019explanation]. In this study, we aim to assess GPT-3 ability to generate explanations on why given text contents are sexist or racist. We are interested in language models' ability in generating explanations because explanations play a crucial role in trust [@pieters2011explanation]. Trust is an essential factor for acceptance, which can shape the interaction between human and technology [@siau2018building]. 
 
-However, our approach to generate explanations is not to be mistaken from Explainable AI. Explainable AI is an approach that aims to  tackle the black box problem in AI decision making by making the decision making process auditable and transparent [**Citation**]. The explanations we prompt GPT-3 to produce are to be interpreted solely from a social lense, and are not shedding a light on the technical or algorithmic process of the generation. In other words, the model's decision on if a given text is sexist or racist does not depend on the explanation in generates. In fact, we have observed the model generating contradicting explanations to its own determination, discussed in the later section. 
+Our approach to generate explanations is not to be mistaken from Explainable AI. Explainable AI is an approach that aims to  tackle the black box problem in AI decision making by making the decision making process auditable and transparent [**Citation**]. The explanations we prompt GPT-3 to produce are to be interpreted solely from a social lense, and are not shedding a light on the technical or algorithmic process of the generation. In other words, the model's decision on if a given text is sexist or racist does not depend on the explanation in generates. In fact, we have observed the model generating contradicting explanations to its own determination, discussed in the later section. 
 
 However, such generations of explanations has an overlapping effect with Explainable AI — increasing users' trust in an AI system. @hoffman2018metrics state that various forms on intelligent systems are trusted more if their decisions are explained. Therefore, sophisticated language models' fidelity of generating valid and truthful explanations should be evaluated. 
 
-In our study, we examine GPT-3's ability to generate explanations for why a given text is sexist or racist. We prompt GPT-3 to generate explanations in two approaches: open-ended and structured. In the open-ended method, GPT-3 is prompted to produce explanations on why a given text is sexist or racist in a question-answering manner. On the other hand, the model generates explanations following a given pattern under the structured method. We then assess the adequacy of the generated explanations to see if the model is fit for explaining why a given text is sexist or racist.
+In our study, we examine GPT-3's ability to generate explanations for why a given text is sexist or racist. We prompt GPT-3 to generate explanations in two approaches: open-ended and structured. In the open-ended method, GPT-3 is prompted to produce explanations on why a given text is sexist or racist in a question-answering manner. On the other hand, the model generates explanations following a given pattern under the structured method. We then assess the adequacy of the generated explanations to see if the model is fit for explaining why a given text is sexist or racist. 
 
 # Background
 
@@ -60,10 +60,7 @@ This paper is, to some extent, an extension of our previous study on GPT-3's abi
 
 ## Comparison of Human- and Machine-Generated Explanations 
 
-**Sharon et al. paper**
-
-Machine generation of open-ended explanation on sexist texts found in forums [**Cite Sharon et al.**]. 
-
+Using also GPT-3 as the source of AI-generated text contents, **Sharon et al citation** presented an unprecedented study that compares AI-generated explanations of subtle sexism assessment with human-creation. The authors collected a series of sexist text content from online forum, prompted GPT-3 to explain why a given text is sexist, then compared the AI-generated explanations with human creation. The authors have found that the model could often provide relevant explanations that are easily understood for human. They have also found that the themes of the explanations between AI and human are similar to each other. An important finding of **Sharon et al citation** is that GPT-3 "tends to take men's position more often than women's", which is an evidence of inherited bias in large language models. While the focus of **Sharon et al. citation** is sexism assessment, our study examines both sexism and racism assessment with both open-ended and structured approaches. In fact, the structured approach we proposed in this study could go beyond the scope of sexism or racism, but discrimination against disability, religions, appearances and more. 
 
 # Methods
 
@@ -81,7 +78,7 @@ The data is collected from prompting GPT-3 (Davinci model) in giving explanation
 
 Because GPT-3’s responses in an open-ended format can be very different each time, we prompt GPT-3 five times for each example to help us examine the variety of the responses and also increase the chance of getting a reasonable responses. “max_tokens”  is the maximum length of each response, which is set to 120. The goal of the prompt is to have the model answers "yes" or "no", then generates explanations within 120 words in free form. The prompts are formulated in a question-answering format. We start the prompt by “Q: ” and place the question in the following sentence to ask the model to explain why the provided example is sexist or not sexist. Following the question is the provided example wrapped in quotes. We then end the prompt with "A:", so the model will generate the response as an answer to the question. The example of an open-ended prompt can be found in **Appendix X**. This process is repeated until all the examples are given an explanation of why it is sexist or not, and the total number of collected responses in open-ended format is **X**.
 
-For structured responses, the prompt contains two examples of sexists texts and two examples of racist texts. The examples demonstrate the desired patterns we want GPT-3 to follow, which is answering "yes" or "no" to a number of preset attributes under a given text. The attributes are target, targeting type, derogatory, profanity, obscenity, violence, rejection, and accusation. We aim to evaluate GPT-3's ability to identify who the target is, what they're targeted based on, and the presence of the characteristics of abusive content. The example of the structured prompt can be found in **Appendix X**. The temperature is iterated through five different values — 0, 0.25, 0.5, 0.75, and 1, so we can observe the performance of the model under different temperature. The "stop" parameter is set to "]", which is a closing bracket corresponding to the opening bracket in the prompt signaling the end of a generation. For each given text, we ask the model to generate 30 responses, and the total number of collected responses in structured format is **X**. We then repeated the process with three of the attributes combining to one. "derogatory", "profanity" and "obscenity" are merged into "insult". The objective is to compare GPT-3's ability in detecting granular attributes versus a general attribute. The example of the structured prompt with reduced attributes can be found in **Appendix X**.
+For structured responses, the prompt contains two examples of sexists texts and two examples of racist texts. The examples demonstrate the desired patterns we want GPT-3 to follow, which is answering "yes" or "no" to a number of preset attributes under a given text. The attributes are target, targeting type, derogatory, profanity, obscenity, violence, rejection, and accusation. We aim to evaluate GPT-3's ability to identify who the target is, what they're targeted based on, and the presence of the characteristics of abusive content. The example of the structured prompt can be found in **Appendix X**. The temperature is iterated through five different values — 0, 0.25, 0.5, 0.75, and 1, so we can observe the performance of the model under different temperature. The "stop" parameter is set to "]", which is a closing bracket corresponding to the opening bracket in the prompt signaling the end of a generation. For each given text, we ask the model to generate 30 responses, and the total number of collected responses in structured format is **X**. @chen2012detecting state that offensive languages contain pejoratives, profanities, or obscenities. Therefore, presence of "insult" can be seen as an attributes that encompasses "derogatory", "profanity" and "obscenity". We then repeated the process with "derogatory", "profanity" and "obscenity" merged into "insult" to compare GPT-3's ability in detecting granular attributes versus a general attribute. The example of the structured prompt with reduced attributes can be found in **Appendix X**.
 
 ## Human Evaluation
 
@@ -97,13 +94,13 @@ For the structured responses, the human annotator evaluates the given texts by t
   
   * Derogatory: **Belittling, diminishing**  
   
-  * Profanity: **swear words, slur, vulgar** 
+  * Profanity: If the given text contains any swear words or curse words. For example
   
-  * Obscenity: **sexual, body parts**
+  * Obscenity: **contains depiction of nudity, sex, or excretion is patently offensive and without artistic or scientific value.**
   
-  * Rejection: **explicit expression of not wanting the presence or existence of a target.** 
+  * Rejection: The human annotator will flag the presence of rejection if the given text contains the author's explicit expression of not wanting the presence or existence of a target. 
   
-  * Accusation: **Accusing the target of misconducts of mischievous behaviours.**  
+  * Accusation: The author's accuses its target of misconducts of mischievous behaviours with generalization without evidence. For example, ""
 
 # Results
 
@@ -436,15 +433,18 @@ ggplot(data=insult_df, aes(x=temperature, y=count, group=matched_attribute)) +
 
 # Discussion
 
-**Ability to generate open-Ended explanations is sub-optimal**
+* Ability to generate open-Ended explanations is sub-optimal
 
-**Open-ended explanations are often accompanied with made-up details**
+* Open-ended explanations are often accompanied with made-up details
 
-**Structured explanations identify higher-level attributes better compared to granular attributes**
+    **Example of a generation of made-up detail**
 
-**Structured explanations can go beyond the scope of sexism and racism**
 
-This approach actually permits the model to detect problematic texts beyond the scope of sexism and racism, because now, the targets can be of any groups identified based on not only gender and race, but also religion, sexual orientation, and disability. 
+* Structured explanations identify higher-level attributes better compared to granular attributes 
+
+* Structured explanations can go beyond the scope of sexism and racism 
+
+This approach actually permits the model to detect problematic texts beyond the scope of sexism and racism, because now, the targets can be of any groups identified based on not only gender and race, but also religion, sexual orientation, and disability. **Examples of discrimination based on disability, religion, and appearance**
 
 **Why this is not Explainable AI**
 
