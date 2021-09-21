@@ -60,7 +60,7 @@ This paper is, to some extent, an extension of our previous study on GPT-3's abi
 
 ## Comparison of Human- and Machine-Generated Explanations 
 
-Using also GPT-3 as the source of AI-generated text contents, **Sharon et al citation** presented an unprecedented study that compares AI-generated explanations of subtle sexism assessment with human-creation. The authors collected a series of sexist text content from online forum, prompted GPT-3 to explain why a given text is sexist, then compared the AI-generated explanations with human creation. The authors have found that the model could often provide relevant explanations that are easily understood for human. They have also found that the themes of the explanations between AI and human are similar to each other. An important finding of **Sharon et al citation** is that GPT-3 "tends to take men's position more often than women's", which is an evidence of inherited bias in large language models. While the focus of **Sharon et al. citation** is sexism assessment, our study examines both sexism and racism assessment with both open-ended and structured approaches. In fact, the structured approach we proposed in this study could go beyond the scope of sexism or racism, but discrimination against disability, religions, appearances and more. 
+Using also GPT-3 as the source of AI-generated text contents, @ferguson2021Openforinterpretation presented an unprecedented study that compares AI-generated explanations of subtle sexism assessment with human-creation. The authors collected a series of sexist text content from online forum, prompted GPT-3 to explain why a given text is sexist, then compared the AI-generated explanations with human creation. The authors have found that the model could often provide relevant explanations that are easily understood for human. They have also found that the themes of the explanations between AI and human are similar to each other. An important finding of @ferguson2021Openforinterpretation is that GPT-3 "tends to take men's position more often than women's", which is an evidence of inherited bias in large language models. While the focus of @ferguson2021Openforinterpretation is sexism assessment, our study examines both sexism and racism assessment with both open-ended and structured approaches. In fact, the structured approach we proposed in this study could go beyond the scope of sexism or racism, but discrimination against disability, religions, appearances and more. 
 
 # Methods
 
@@ -68,17 +68,17 @@ Using also GPT-3 as the source of AI-generated text contents, **Sharon et al cit
 
 We use the ETHOS dataset created by @mollas2020ethos. ETHOS is based on comments found in YouTube and Reddit. The ETHOS YouTube data is collected through Hatebusters [@anagnostou2018hatebusters]. Hatebusters is a platform that collects comments from YouTube and assigns a 'hate' score to them using a support vector machine. The Reddit data is collected from the Public Reddit Data Repository [@baumgartner2020pushshift]. The dataset has two variants: binary and multi-label. In the binary dataset comments are classified as hate or non-hate. In the multi-label variant, the comments are evaluated on measures that include violence, gender, race, ability, religion, and sexual orientation. The examples provided in this paper are from the ETHOS dataset and hence contain typos, misspelling, and offensive content.
 
-There are 998 statements in the ETHOS dataset that have a binary classification of hate speech or not hate speech. Of these, the 433 statements that contain hate speech additionally have multiple labels that classify the content, for instance, does the comment have to do with violence, gender, race, nationality, disability, etc. We considered the **X** statements that contain race-based hate speech, and we focus on the **X** whose race-based score is at least 0.75. Similarly, we considered the **X** statements that contain gender-based hate speech, and again focused on the **X** whose gender-based score is at least 0.75. 
+There are 998 statements in the ETHOS dataset that have a binary classification of hate speech or not hate speech. Of these, the 433 statements that contain hate speech additionally have multiple labels that classify the content, for instance, does the comment have to do with violence, gender, race, nationality, disability, etc. For the open-ended explanations, we focus on 28 unique comments whose race-based score is 1 and 48 unique comments whose gender-based score is 1. The final data set is generated based 76 unique comments. 
 
-A human annotator evaluates the comments and extracts the following attributes from them — target, targeting type, violence, derogatory, profanity, obscenity, rejection, and accusation. Comments that have unclear target or targeting type are not included. The final dataset contains **X** comments. 
+For the structured responses, we focus on 66 unique comments whose race-based score is at least 0.75 and 51 unique comments whose gender-based score is at least 0.75. The model is prompted to produce 30 generations for each unique comment, which yields 3510 generations in total. A human annotator evaluates the comments and extracts the following attributes from them — target, targeting type, violence, derogatory, profanity, obscenity, rejection, and accusation. Comments that have unclear target or targeting type are not included. 
 
 ## Data Collection
 
 The data is collected from prompting GPT-3 (Davinci model) in giving explanations through OpenAI API. We modified the following hyper-parameters for desired outputs — `temperature`, `stop`, `n`, and `max_tokens`. `temperature` determines how creative the response will be. The minimum value is 0 (conservative) and the maximum is 1 (creative). For open-ended responses, the temperature is set to 0.7 in our study for GPT-3 to obtain some creative liberty to generate open-ended responses. We set the `stop` parameter to "Q:", which means the generation will stop before the model generates another question, in case the model follows the pattern and attempts to generate another similar question after the answer. “n” is the number of responses generated, which is set to 5. 
 
-Because GPT-3’s responses in an open-ended format can be very different each time, we prompt GPT-3 five times for each example to help us examine the variety of the responses and also increase the chance of getting a reasonable responses. “max_tokens”  is the maximum length of each response, which is set to 120. The goal of the prompt is to have the model answers "yes" or "no", then generates explanations within 120 words in free form. The prompts are formulated in a question-answering format. We start the prompt by “Q: ” and place the question in the following sentence to ask the model to explain why the provided example is sexist or not sexist. Following the question is the provided example wrapped in quotes. We then end the prompt with "A:", so the model will generate the response as an answer to the question. The example of an open-ended prompt can be found in **Appendix X**. This process is repeated until all the examples are given an explanation of why it is sexist or not, and the total number of collected responses in open-ended format is **X**.
+Because GPT-3’s responses in an open-ended format can be very different each time, we prompt GPT-3 five times for each example to help us examine the variety of the responses and also increase the chance of getting a reasonable responses. “max_tokens”  is the maximum length of each response, which is set to 120. The goal of the prompt is to have the model answers "yes" or "no", then generates explanations within 120 words in free form. The prompts are formulated in a question-answering format. We start the prompt by “Q: ” and place the question in the following sentence to ask the model to explain why the provided example is sexist or not sexist. Following the question is the provided example wrapped in quotes. We then end the prompt with "A:", so the model will generate the response as an answer to the question. The example of an open-ended prompt can be found in **Appendix X**. This process is repeated until all the examples are given an explanation of why it is sexist or not, and the total number of collected responses in open-ended format is 380 with 5 open-ended generations per comment.
 
-For structured responses, the prompt contains two examples of sexists texts and two examples of racist texts. The examples demonstrate the desired patterns we want GPT-3 to follow, which is answering "yes" or "no" to a number of preset attributes under a given text. The attributes are target, targeting type, derogatory, profanity, obscenity, violence, rejection, and accusation. We aim to evaluate GPT-3's ability to identify who the target is, what they're targeted based on, and the presence of the characteristics of abusive content. The example of the structured prompt can be found in **Appendix X**. The temperature is iterated through five different values — 0, 0.25, 0.5, 0.75, and 1, so we can observe the performance of the model under different temperature. The "stop" parameter is set to "]", which is a closing bracket corresponding to the opening bracket in the prompt signaling the end of a generation. For each given text, we ask the model to generate 30 responses, and the total number of collected responses in structured format is **X**. @chen2012detecting state that offensive languages contain pejoratives, profanities, or obscenities. Therefore, presence of "insult" can be seen as an attributes that encompasses "derogatory", "profanity" and "obscenity". We then repeated the process with "derogatory", "profanity" and "obscenity" merged into "insult" to compare GPT-3's ability in detecting granular attributes versus a general attribute. The example of the structured prompt with reduced attributes can be found in **Appendix X**.
+For structured responses, the prompt contains two examples of sexists texts and two examples of racist texts. The examples demonstrate the desired patterns we want GPT-3 to follow, which is answering "yes" or "no" to a number of preset attributes under a given text. The attributes are target, targeting type, derogatory, profanity, obscenity, violence, rejection, and accusation. We aim to evaluate GPT-3's ability to identify who the target is, what they're targeted based on, and the presence of the characteristics of abusive content. The example of the structured prompt can be found in **Appendix X**. The temperature is iterated through five different values — 0, 0.25, 0.5, 0.75, and 1, so we can observe the performance of the model under different temperature. The "stop" parameter is set to "]", which is a closing bracket corresponding to the opening bracket in the prompt signaling the end of a generation. For each given text, we ask the model to generate 30 responses, and the total number of collected responses in structured format is 3510. @chen2012detecting state that offensive languages contain pejoratives, profanities, or obscenities. Therefore, presence of "insult" can be seen as an attributes that encompasses "derogatory", "profanity" and "obscenity". We then repeated the process with "derogatory", "profanity" and "obscenity" merged into "insult" to compare GPT-3's ability in detecting granular attributes versus a general attribute. The example of the structured prompt with reduced attributes can be found in **Appendix X**.
 
 ## Human Evaluation
 
@@ -108,7 +108,7 @@ For the structured responses, the human annotator evaluates the given texts by t
 
 ### Binary results
 
-Before the generation of an explanation, GPT-3 is asked to identify first if a given text is sexist or racist by answering "yes" or "no". The following table shows matches and mismatches of such identification. If GPT-3 answers "yes", or in any other way to indicate a text is sexist or racist, the answer is a match, regardless the adequacy of the explanation. The number of samples are the aggregated counts of the five explanation of each comment. The results shown in \@ref(tab:binaryresultagg) indicate that the majority of times, GPT-3 did not successfully identify sexist or racist text contents. 
+Before the generation of an explanation, GPT-3 is asked to identify first if a given text is sexist or racist by answering "yes" or "no". The following table shows matches and mismatches of such identification. If GPT-3 answers "yes", or in any other way to indicate a text is sexist or racist, the answer is a match, regardless the adequacy of the explanation. The number of samples are the aggregated counts of the five explanation of each comment. The results shown in Table \@ref(tab:binaryresultagg) indicate that the majority of times, GPT-3 did not successfully identify sexist or racist text contents. 
 
 ```{r binaryresultagg}
 open_ended_results_raw <- read.csv(here::here("output/data/open_ended_results_with_human_label.csv"))
@@ -128,7 +128,7 @@ open_ended_results_binary_match_agg %>%
                booktabs = TRUE)
 ```
 
-In each set of the five generated outputs to one given text, we count the number of times where GPT-3 successfully identify the given text as sexist or racist. If in three or more out of the five times the model has successful identification with one given example, it is marked as `majority correct`. The results of such the `majority correct` count is displayed in \@ref(tab:binaryresult). In 37 out of the 76 cases, the model has been right more frequently than wrong in identifying sexist or racist text. 
+In each set of the five generated outputs to one given text, we count the number of times where GPT-3 successfully identify the given text as sexist or racist. If in three or more out of the five times the model has successful identification with one given example, it is marked as `majority correct`. The results of such the `majority correct` count is displayed in Table \@ref(tab:binaryresult). In 37 out of the 76 cases, the model has been right more frequently than wrong in identifying sexist or racist text. 
 
 ```{r binaryresult}
 open_ended_results_binary_match <- open_ended_results_raw %>% 
@@ -162,7 +162,7 @@ open_ended_results_binary_match %>%
 
 ### Reasoning Adequacy
 
-For the 180 generations where GPT-3 successfully identify the sexist or racist text, we further examine the adequacy of the generated explanations. \@ref(tab:reasoningAdequacy) showcases the count of the adequacy labels of the 180 evaluations. In 76 out of 180 times, the model's explanations are constructed with false reasoning. In 60 cases, the model generated explanations with complete reasoning; in 5 cases, the model generated explanation with completed reasoning accompanied with overreaching reasoning. In 25 cases, the model produced explanations with insufficient reasoning; in 14 cases the model did not produce any explanation or the produced contents are not aimed to provide any explanation. 
+For the 180 generations where GPT-3 successfully identify the sexist or racist text, we further examine the adequacy of the generated explanations. Table \@ref(tab:reasoningAdequacy) showcases the count of the adequacy labels of the 180 evaluations. In 76 out of 180 times, the model's explanations are constructed with false reasoning. In 60 cases, the model generated explanations with complete reasoning; in 5 cases, the model generated explanation with completed reasoning accompanied with overreaching reasoning. In 25 cases, the model produced explanations with insufficient reasoning; in 14 cases the model did not produce any explanation or the produced contents are not aimed to provide any explanation. 
 
 ```{r reasoningAdequacy}
 open_ended_results_reason <- open_ended_results_raw %>%
@@ -181,7 +181,7 @@ open_ended_results_reason %>%
 
 ### Target Identification and Made-Up Details
 
-We delved into the 180 generations where GPT-3 successfully identify the sexist or racist text to see if the explanation provide an identification of who the target is and if the explanation is accompanied with made-up details. The results of target identification is displayed in \@ref(tab:openendedResultsTargetID). 117 out of the 180 cases, the model provided an explanation along with the identification of the target (women, African Americans... etc). In some cases, the model generated explanations along with made-up details such as assigning false source to the given text. The number of cases where made-up details are found is shown in \@ref(tab:openendedResultsMadeupDetails). Nearly one third of the times, the model generated made-up details in the explanations. 
+We delved into the 180 generations where GPT-3 successfully identify the sexist or racist text to see if the explanation provide an identification of who the target is and if the explanation is accompanied with made-up details. The results of target identification is displayed in Table \@ref(tab:openendedResultsTargetID). 117 out of the 180 cases, the model provided an explanation along with the identification of the target (women, African Americans... etc). In some cases, the model generated explanations along with made-up details such as assigning false source to the given text. The number of cases where made-up details are found is shown in Table \@ref(tab:openendedResultsMadeupDetails). Nearly one third of the times, the model generated made-up details in the explanations. 
 
 ```{r openendedResultsTargetID}
 open_ended_results_targetID <- open_ended_results_raw %>%
@@ -347,9 +347,9 @@ structured_a6_n30_list <- rbind(structured_a6_t0_n30_list, structured_a6_t25_n30
 
 ### Number of Matched Numbers within Different Temperatures 
 
-\ref{fig:avgmatches} shows the structured result average number of attribute matches in temperature 0, 0.25, 0.5, 0.75 and 1. We observe a general trend of number of matches decreasing as the temperature increases. Except for 'Target', 'Profanity' and 'Obscenity' where the model performed the best under temperature 0.25 by a thin margin, the results of temperature 0 have the highest number of matches with human evaluation in every other attribute. The model performed consistently the poorest under temperature 1. Moreover, as the distribution of matched number varies within wider ranges as the temperature increases.  
+Figure \ref{fig:avgmatches} shows the structured result average number of attribute matches in temperature 0, 0.25, 0.5, 0.75 and 1. We observe a general trend of number of matches decreasing as the temperature increases. Except for 'Target', 'Profanity' and 'Obscenity' where the model performed the best under temperature 0.25 by a thin margin, the results of temperature 0 have the highest number of matches with human evaluation in every other attribute. The model performed consistently the poorest under temperature 1. Moreover, as the distribution of matched number varies within wider ranges as the temperature increases.  
 
-```{r avgmatches, fig.height=7}
+```{r avgmatches, fig.height=7, fig.cap="Average number of matched attributes in temperature 0, 0.25, 0.5, 0.75 and 1"}
 p1 <- ggplot(structured_a8_n30_list, aes(factor(temperature), matched_target))
 p1 <- p1 + geom_boxplot()
 
@@ -374,12 +374,12 @@ p7<- p7 + geom_boxplot()
 p8 <- ggplot(structured_a8_n30_list, aes(factor(temperature), matched_accusation))
 p8<- p8 + geom_boxplot()
 
-gridExtra::grid.arrange(p1,p2,p3,p4,p5,p6,p7,p8, ncol=2)
+gridExtra::grid.arrange(p1,p2,p3,p4,p5,p6,p7,p8, ncol=2, top=grid::textGrob("Average number of matched attributes in different temperatures"))
 ```
 
 ### Comparison of All Attributes
 
-The descriptive statistic is conducted and shown in \@ref(tab:matchSummaryTable) to assess the model' overall performances in each attribute. The results show that the model performs the best in identifying the identity categories (gender, race...etc) a sexist or racist text is targeting (sex, gender, race, origin...etc). Second to the targeting type, the model also performs well in identifying who the target is (women, African Americans...etc). The model seems to have varied capabilities in identifying the presence of violence, derogatory, profanity, obscenity, rejection, and accusation in the texts. 
+The descriptive statistic is conducted and shown in Table \@ref(tab:matchSummaryTable) to assess the model' overall performances in each attribute. The results show that the model performs the best in identifying the identity categories (gender, race...etc) a sexist or racist text is targeting (sex, gender, race, origin...etc). Second to the targeting type, the model also performs well in identifying who the target is (women, African Americans...etc). The model seems to have varied capabilities in identifying the presence of violence, derogatory, profanity, obscenity, rejection, and accusation in the texts. 
 
 ```{r matchSummaryTable}
 all_attr_summary <- add_row(target_mismatch_summary,targetingtype_mismatch_summary) %>%
@@ -400,16 +400,18 @@ all_attr_summary_t <- as.data.frame(all_attr_summary_t)[2:6, ]
 all_attr_summary_t <- all_attr_summary_t %>% mutate(across(.fns = type.convert))
 
 summary(all_attr_summary_t) %>% 
-  knitr::kable(caption = "Structured results attribute matches descriptive data",
-               booktabs = TRUE)
+  knitr::kable(caption = "Descriptive statistics of attribute matches under structured responses",
+               booktabs = TRUE) %>% 
+  kableExtra::column_spec(column = 1:8, width = "5em") %>% 
+  kableExtra::kable_styling(font_size = 7.5)
 ```
 
 ### Number of Matched Numbers within Granular Attributes V.S. General Attribute
 
-We define ‘Insult’ as a general attribute that encompasses ‘Derogatory’, ‘Profanity’, and ‘Obscenity’, which are what we called granular attributes. We examine how GPT-3 performs in identifying a more general attribute compared to identifying more granular attributes. \ref{fig:insultMismatchSummaryLineChart} shows the average numbers of matches in ‘Insult’, ‘Derogatory’, ‘Profanity’, and ‘Obscenity’ in temperature 0, 0.25, 0.5, 0.75 and 1. The results reveals that the model performs better with identifying general attributes compared to granular attributes. 
+We define ‘Insult’ as a general attribute that encompasses ‘Derogatory’, ‘Profanity’, and ‘Obscenity’, which are what we called granular attributes. We examine how GPT-3 performs in identifying a more general attribute compared to identifying more granular attributes. Figure \ref{fig:insultMismatchSummaryLineChart} shows the average numbers of matches in ‘Insult’, ‘Derogatory’, ‘Profanity’, and ‘Obscenity’ in temperature 0, 0.25, 0.5, 0.75 and 1. The results reveals that the model performs better with identifying general attributes compared to granular attributes. 
 
 
-```{r insultMismatchSummaryLineChart, fig.height=3}
+```{r insultMismatchSummaryLineChart, fig.height=3, fig.cap="Average number of matches in insult, derogatory, profanity, and obscenity under temperature 0, 0.25, 0.5, 0.75 and 1"}
 insult_df <- add_column(structured_a6_n30_list["index"],structured_a6_n30_list["temperature"], structured_a6_n30_list["matched_insult"], structured_a8_n30_list["matched_derogatory"], structured_a8_n30_list["matched_profanity"],  structured_a8_n30_list["matched_obscenity"])
 insult_df <- insult_df %>%
   group_by(index, temperature) %>%
@@ -426,7 +428,8 @@ values = c( c(matched_insult="orange"), "#a0b9e3", "#4c82df", "#0c089c")
 ggplot(data=insult_df, aes(x=temperature, y=count, group=matched_attribute)) +
   geom_line(aes(color=matched_attribute)) + #, linetype=general))+
   geom_point()+
-  scale_colour_manual(values=values)
+  scale_colour_manual(values=values) +
+  labs(title = "Average number of matches in insult, derogatory, profanity, and obscenity")
 
 ```
 
@@ -446,7 +449,7 @@ In the above generation, the model demonstrated its impressive ability to genera
 
 > Prompt
 
-> Is the following statement in quotes sexist? Answer yes or no and explain why. '''I wouldn‚Äôt like this girl as a police officer. I want police to keep me safe, she and every other woman cannot keep us safe they are week''' 
+> Is the following statement in quotes sexist? Answer yes or no and explain why. '''I wouldn't like this girl as a police officer. I want police to keep me safe, she and every other woman cannot keep us safe they are week''' 
 
 > GPT-3 Response
 
@@ -483,16 +486,21 @@ In the above example, GPT-3 first categorized the given text as non-sexist. Howe
 
 > Yes, it is sexist. The statement, which was made by a teacher in a classroom full of teenage girls, implies that women are not smart enough to do anything but the jobs of mother and wife. The wording could also be taken as offensive to women who do, in fact, have careers.
 
+For the structured explanations, we have observed that the model has relatively greater ability in identifying the target and the targeting type in given texts compared to identifying the presences of abusive or negative elements such as violence, derogatory, profanity, obscenity, rejection, or accusation. One possible reason behind this phenomenon is that target or targeting type is often directly referenced in the text; often times, the answer of the target is identical to the vulgar terms a target is called in the text. For example, instead of identifying female target to women or black target to black, the model generated "target: bitch", or "target: nigger" as the identification of the targets. Such identification is semantically correct but arguably inappropriate. The relative lower performance in identifying violence, derogatory, profanity, obscenity, rejection, or accusation also reveals the model's limitations in grasping these given concepts — especially less with the nuanced concepts such as derogatory, profanity, or obscenity, compared to a more general concept such as "insult".
 
-* Structured explanations identify higher-level attributes better compared to granular attributes 
+The capacity of GPT-3 in identifying the target and targeting type in the structure approach can permit the model to detect problematic texts beyond the scope of sexism and racism. For example:
 
-* Structured explanations can go beyond the scope of sexism and racism 
+> Prompt
 
-This approach actually permits the model to detect problematic texts beyond the scope of sexism and racism, because now, the targets can be of any groups identified based on not only gender and race, but also religion, sexual orientation, and disability. **Examples of discrimination based on disability, religion, and appearance**
+> what a disgusting man and disgusting religion. He admits that muslim buy all their wifes ! .pff...This is why all muslims are poor...islam keeps them stupid !
 
+> GPT-3 Response
 
-    
-In conclusion, because of the frequent errors in reasoning and frequent insertion of made-up details, we caution any use of GPT-3 to generate explanations.
+> target: muslim | targeting type: religion ...
+
+In the above example, GPT-3 successfully identified the target as a muslim, the the targeting type as religion. With the flexibility of the approach, we observed that GPT-3 could successfully finding target identified based on not only gender and race, but also religion, sexual orientation, and disability. 
+
+In our study, we have witnessed the capacity of GPT-3 to generate coherent and meaningful explanations to why a given text is sexist or racist in an open-ended manner. However, the reasoning are often false or insufficient, and with occurrence of made-up details. Moreover, in the study of @ferguson2021Openforinterpretation, the authors have observed that the model took men's position more than women's positions in the sexism assessment explanations, which implies the existence of inherited bias in the model. Therefore, we caution the usage of large language models in producing explanations in social themes. On the other hands, although the model can not completely identify the abusive or negative elements in the given texts, the structured approach opens the door for identifying the target and targeting type that are beyond the scope of sexism or racism. In future studies, we intend to explore ways to improve GPT-3's performance in identifying abusive and negative elements in texts through the addition of instruction and the curation of the given examples.
 
 \newpage
 
