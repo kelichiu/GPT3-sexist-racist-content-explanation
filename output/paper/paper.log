@@ -1,11 +1,11 @@
-This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021) (preloaded format=xelatex 2021.8.12)  23 SEP 2021 13:11
+This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021) (preloaded format=xelatex 2021.9.27)  27 SEP 2021 15:36
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **paper.tex
 (./paper.tex
 LaTeX2e <2021-06-01> patch level 1
-L3 programming layer <2021-07-12> (/Users/rohanalexander/Library/TinyTeX/texmf-
+L3 programming layer <2021-08-27> (/Users/rohanalexander/Library/TinyTeX/texmf-
 dist/tex/latex/base/article.cls
 Document Class: article 2021/02/12 v1.4n Standard LaTeX document class
 (/Users/rohanalexander/Library/TinyTeX/texmf-dist/tex/latex/base/size12.clo
@@ -671,58 +671,58 @@ LaTeX Font Info:    Trying to load font information for T1+phv on input line 16
 File: t1phv.fd 2020/03/25 scalable font definitions for T1/phv.
 ) [1
 
-] [2] [3] [4]
-Overfull \hbox (7.94777pt too wide) in paragraph at lines 298--299
-[]\T1/ppl/m/n/12 Accusation: The au-thor's ac-cuses its tar-get of mis-con-duct
-s of mis-chievous be-haviours
+] [2] [3] [4] [5]
+Overfull \hbox (1.58772pt too wide) in paragraph at lines 316--317
+[]\T1/ppl/m/n/12 Accusation: The au-thor ac-cuses their tar-get of mis-con-duct
+ or mis-chievous be-haviour
  []
 
-LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 3
-26.
-(/Users/rohanalexander/Library/TinyTeX/texmf-dist/tex/latex/lm/t1lmtt.fd
-File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-) [5] [6]
+[6] [7]
 File: paper_files/figure-latex/avgmatches-1.pdf Graphic file (type pdf)
 <use paper_files/figure-latex/avgmatches-1.pdf>
-LaTeX Font Info:    Calculating math sizes for size <7.5> on input line 421.
-[7] [8]
+LaTeX Font Info:    Calculating math sizes for size <7.5> on input line 439.
+
+Overfull \hbox (11.53319pt too wide) in paragraph at lines 439--451
+ [][] 
+ []
+
 File: paper_files/figure-latex/insultMismatchSummaryLineChart-1.pdf Graphic fil
 e (type pdf)
 <use paper_files/figure-latex/insultMismatchSummaryLineChart-1.pdf>
-[9] [10]
-Overfull \hbox (2.30779pt too wide) in paragraph at lines 540--541
+[8] [9] [10] [11]
+Overfull \hbox (2.30779pt too wide) in paragraph at lines 559--560
 []\T1/ppl/m/n/12 For the struc-tured ex-pla-na-tions, we have ob-served that th
 e model has rel-a-tively greater
  []
 
-[11] [12]
-Overfull \hbox (2.52136pt too wide) in paragraph at lines 605--606
+[12] [13]
+Overfull \hbox (2.52136pt too wide) in paragraph at lines 626--627
 []\T1/ppl/m/n/12 '`'Women are made for mak-ing ba-bies and cook-ing din-ner and
  noth-ing else!!!''' 
  []
 
 Missing character: There is no ‚ ("201A) in font pplr8t!
-[13]
-Overfull \hbox (2.52136pt too wide) in paragraph at lines 635--636
+[14]
+Overfull \hbox (2.52136pt too wide) in paragraph at lines 656--657
 []\T1/ppl/m/n/12 '`'Women are made for mak-ing ba-bies and cook-ing din-ner and
  noth-ing else!!!''' 
  []
 
 Missing character: There is no ‚ ("201A) in font pplr8t!
-[14] (./paper.bbl
+[15] (./paper.bbl
 File: parrot.png Graphic file (type bmp)
 <parrot.png>
-[15]) [16] (./paper.aux)
+[16]) [17] (./paper.aux)
 Package rerunfilecheck Info: File `paper.out' has not changed.
-(rerunfilecheck)             Checksum: FB9CAB97398932FA59EEBEFA3A5CE5FE;3939.
+(rerunfilecheck)             Checksum: A3590A1AF650766EB6FE9962A64B43EF;3794.
  ) 
 Here is how much of TeX's memory you used:
- 12225 strings out of 478475
- 182736 string characters out of 5857694
- 519919 words of memory out of 5000000
- 32304 multiletter control sequences out of 15000+600000
- 439431 words of font info for 106 fonts, out of 8000000 for 9000
+ 12204 strings out of 478492
+ 182338 string characters out of 5860518
+ 515008 words of memory out of 5000000
+ 32270 multiletter control sequences out of 15000+600000
+ 442655 words of font info for 109 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 60i,11n,66p,1146b,463s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 60i,9n,66p,1140b,465s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on paper.pdf (16 pages).
+Output written on paper.pdf (17 pages).
