@@ -1,3 +1,3 @@
-# Using GPT-3 to explain why a text passage is sexist or racist
+# Explaining Why Text is Sexist or Racist with GPT-3
 
-This paper builds on ["Detecting Hate Speech with GPT-3"](https://github.com/kelichiu/GPT3-hate-speech-detection) where we use GPT-3 to provide explanation of why a text passage is sexist or racist.
+Being able to generate a coherent explanation for an opinion is important for establishing trust in that opinion. We assess the extent to which GPT-3 can generate explanations for why a given text is sexist or racist. We find a general inadequacy in the explanations provided by GPT-3. Even when GPT-3 correctly classifies a statement as sexist or racist, it often provides false or insufficient explanations. Sensible explanations are a critical part of establishing trust in large language models, and AI more generally, and more work is needed in this space.
