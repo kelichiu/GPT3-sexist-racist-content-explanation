@@ -59,7 +59,7 @@ The remainder of this paper is structured as follows: Section \@ref(background) 
 
 GPT-3 is the third generation of the Generative Pre-trained Transformer (GPT) model created by OpenAI [@brown2020language]. Compared to the language models that preceded it, GPT-3 has a few distinguishing features. Firstly, GPT-3 is a general model that can be applied to a variety of text-based tasks. Secondly, it can 'learn' by picking up patterns and producing results that follow those patterns. Thirdly, the examples and instructions fed to the model are expressed in natural language. In other words, it is programming with plain language instead of code. Finally, the model generates text quickly and fluently, and the generated content is often hard to distinguish from that created by humans. 
 
-These characteristics mean researchers are wary that large language models could be used to generate misinformation at large scale [@bender2021dangers]. Large language models, such as Google's GShard [@lepikhin2020gshard] and Switch-C [@fedus2021switch] tend to be less accessible to the public. OpenAI grants selected access to GPT-3 through an API, while the two earlier versions are publicly available.
+These characteristics mean researchers are wary that large language models could be used to generate misinformation at large scale [@bender2021dangers]. Large language models, such as Google's GShard [@lepikhin2020gshard] and Switch-C [@fedus2021switch] tend to be less accessible to the public. OpenAI grants selected access to GPT-3 through an API, while the two earlier versions, namely GPT and GPT-2, are publicly available.
 
 
 ## Sexist and racist text detection
@@ -127,10 +127,10 @@ For the structured responses, the human annotator evaluates the given text by: t
 * Target: The annotator is free to list none, one, more multiple targets based on their judgment. Although the examples are focused on targets whose identities are based on gender or race, the annotator is not limited to these options.
 * Targeting type: Similar to identifying targets, the annotator is also free to label the targeting type beyond to scope of gender or race.
 * Violence: The human annotator will only flag the presence of violence if the given text incites violence towards the target. Mentioning a violent event is not considered presence of violence.
-* Derogatory: Belittling, demeaning, or degrading a target in a given text.
-* Profanity: If a given text contains any swear words or curse words, the presence of profanity should be labelled.
+* Derogatory: Belittling, demeaning, or degrading a target in a given text [@mwderogatory].
+* Profanity: If a given text contains any swear words or curse words [@mwdprofanity], the presence of profanity should be labelled.
 * Obscenity: Presence of obscenity should be flagged if a given text contains depiction of nudity, sex, or excretion, is patently offensive, and without artistic or scientific value.
-* Rejection: The human annotator will flag the presence of rejection if the given text contains the author's explicit expression of not wanting the presence or existence of a target.
+* Rejection: The human annotator will flag the presence of rejection if the given text contains the author's explicit expression of not wanting the presence or existence of a target [@fcc2021].
 * Accusation: The author accuses their target of misconduct or mischievous behaviour with generalization without evidence.
 
 # Results
