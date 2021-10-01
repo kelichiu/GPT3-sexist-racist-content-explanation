@@ -61,7 +61,6 @@ GPT-3 is the third generation of the Generative Pre-trained Transformer (GPT) mo
 
 These characteristics mean researchers are wary that large language models could be used to generate misinformation at large scale [@bender2021dangers]. Large language models, such as Google's GShard [@lepikhin2020gshard] and Switch-C [@fedus2021switch] tend to be less accessible to the public. OpenAI grants selected access to GPT-3 through an API, while the two earlier versions, namely GPT and GPT-2, are publicly available.
 
-
 ## Sexist and racist text detection
 
 @chiu2021detecting use GPT-3 to identify sexist and racist hate speech text passages with zero-, one-, and few-shot learning. They find that with zero- and one-shot learning, GPT-3 can identify sexist or racist text with an accuracy between 48 per cent and 69 per cent. With few-shot learning and an instruction included in the prompt, the model's accuracy can be as high as 78 per cent. The implication of that paper is that large language models have a role to play in hate speech detection, and that with further development language models could be used to counter hate speech and even self-police. To that end, @schick2021selfdiagnosis find language models are, to some extent, able to recognise undesirable bias.
@@ -94,7 +93,7 @@ To evaluate the structured explanations, we primarily consider the dataset with 
 
 We modify the following four hyper-parameters: 'temperature', 'stop', 'n', and 'max_tokens'. 
 
-The hyper-parameter 'temperature' determines how creative the response will be. The minimum value is 0 (conservative) and the maximum is 1 (creative). For open-ended responses, the temperature is set to 0.7, which enables some creative liberty to generate open-ended responses. 
+The hyper-parameter 'temperature' determines how creative the response will be. The minimum value is 0 (conservative) and the maximum is 1 (creative). For open-ended responses, the temperature is set to 0.7, which is the default temperature in OpenAI Playground for GPT-3. We choose to maintain the default setting, which enables some creative liberty to generate open-ended responses. On the other hand, for the structured responses, the temperature is iterated through 0, 0.25, 0.5, 0.75, and 1. We do not intend to conduct a grid tuning because we are not looking for the best performance, but to compare the variation of performance under different threshold of temperature. 
 
 We set the 'stop' hyper-parameter to 'Q:', which means the generation will stop before the model generates another question in case the model follows the pattern and attempts to generate another similar question after the answer. 
 
@@ -866,7 +865,11 @@ insult_df <-
       "matched_obscenity"
     )
   ))  %>%
-  mutate(general = ifelse(matched_attribute == "matched_insult", "1", "0"))
+  mutate(general = ifelse(matched_attribute == "matched_insult", "1", "0")) %>%
+  mutate(matched_attribute = str_replace(matched_attribute, "matched_insult", "Matched Insult")) %>%
+  mutate(matched_attribute = str_replace(matched_attribute, "matched_derogatory", "Matched Derogatory")) %>%
+  mutate(matched_attribute = str_replace(matched_attribute, "matched_profanity", "Matched Profanity")) %>%
+  mutate(matched_attribute = str_replace(matched_attribute, "matched_obscenity", "Matched Obscenity"))
 
 # insult_df <-
 #   insult_df %>%
@@ -957,7 +960,7 @@ The model's explanations are at times accompanied with made-up details. In the e
 
 > Yes, it is sexist. The statement, which was made by a teacher in a classroom full of teenage girls, implies that women are not smart enough to do anything but the jobs of mother and wife. The wording could also be taken as offensive to women who do, in fact, have careers.
 
-For the structured explanations, we have observed that the model has relatively greater ability in identifying the target and the targeting type in given statements compared to identifying the presence of abusive or negative elements such as violence, derogatory, profanity, obscenity, rejection, or accusation. One possible reason behind this phenomenon is that target or targeting type is often directly referenced in the statement; often the answer of the target is identical to the vulgar terms a target is called in the statement. For example, instead of identifying female targets as women or black targets as black, the model generated 'target: bitch', or 'target: ni**er' as the identification of the targets. Such identification is semantically correct but arguably inappropriate. The relative lower performance in identifying violence, derogatory, profanity, obscenity, rejection, or accusation also reveals the model's limitations in grasping these given concepts---especially less with the nuanced concepts such as derogatory, profanity, or obscenity, compared to a more general concept such as 'insult'.
+For the structured explanations, we have observed that the model has relatively greater ability in identifying the target and the targeting type in given statements compared to identifying the presence of abusive or negative elements such as violence, derogatory, profanity, obscenity, rejection, or accusation. One possible reason behind this phenomenon is that target or targeting type is often directly referenced in the statement; often the answer of the target is identical to the vulgar terms a target is called in the statement. For example, instead of identifying female targets as women or black targets as black, the model generated 'target: b\*\*ch', or 'target: ni\*\*er' as the identification of the targets. Such identification is semantically correct but arguably inappropriate. The relative lower performance in identifying violence, derogatory, profanity, obscenity, rejection, or accusation also reveals the model's limitations in grasping these given concepts---especially less with the nuanced concepts such as derogatory, profanity, or obscenity, compared to a more general concept such as 'insult'.
 
 The capacity of GPT-3 to identify the target and targeting type in the structured approach can permit the model to detect problematic statements beyond the scope of sexism and racism. For example:
 
