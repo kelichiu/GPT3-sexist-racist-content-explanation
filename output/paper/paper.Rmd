@@ -19,7 +19,7 @@ author:
   affiliation: University of Toronto
 - name: Rohan Alexander
   affiliation: University of Toronto
-abstract: "Being able to generate a coherent explanation for an opinion is important for establishing trust in that opinion. We assess the extent to which GPT-3 can generate explanations for why a given text is sexist or racist. We find a general inadequacy in the explanations provided by GPT-3. Even when GPT-3 correctly classifies a statement as sexist or racist, it often provides false or insufficient explanations. Sensible explanations are a critical part of establishing trust in large language models, and AI more generally, and more work is needed in this space."
+abstract: "Being able to generate a coherent explanation for an opinion is important for establishing trust in that opinion. We assess the extent to which GPT-3 can generate explanations for why a given text is sexist or racist. We find a general inadequacy in the explanations provided by GPT-3. Even when GPT-3 correctly classifies a statement as sexist or racist, it often provides false or partial explanations. Sensible explanations are a critical part of establishing trust in large language models, and AI more generally, and more work is needed in this space."
 keywords: "GPT-3; natural language processing; quantitative analysis; hate speech."
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 geometry: margin=1in
@@ -119,7 +119,7 @@ The attributes that are of interest are: *target*, *targeting type*, *derogatory
 
 The model-generated responses are then evaluated by an annotator. This is done at different levels of specificity for the open-ended responses and the structured responses.
 
-Three attributes of the open-ended responses are annotated: target identification; presence of made-up details; and reasoning adequacy. Target identification and presence of made-up details are binary evaluations that indicate if the model has identified the target of the sexist or racist content, and/or has made-up details in the generated explanations. The reasoning adequacy of each explanation is categorized as: no explanation; false explanation; insufficient explanation; complete explanation; and complete explanation with over-reaching explanation.
+Three attributes of the open-ended responses are annotated: target identification; presence of made-up details; and reasoning adequacy. Target identification and presence of made-up details are binary evaluations that indicate if the model has identified the target of the sexist or racist content, and/or has made-up details in the generated explanations. The reasoning adequacy of each explanation is categorized as: no explanation; false explanation; partial explanation; and complete explanation.
 
 For the structured responses, the annotator evaluates the given text by: target, targeting type, violence, derogatory, profanity, obscenity, rejection, and accusation. The guidelines for labeling are:
 
@@ -142,7 +142,7 @@ GPT-3 is prompted to identify whether a given text is sexist or racist by answer
 
 ```{r binaryresultagg}
 open_ended_results_raw <-
-  read.csv(here::here("output/data/open_ended_results_with_human_label.csv"))
+  read.csv(here::here("output/data/open_ended_binary_match.csv"))
 open_ended_results_binary_match_agg <- open_ended_results_raw %>%
   select(binary_match) %>%
   group_by(binary_match) %>%
@@ -201,20 +201,39 @@ open_ended_results_binary_match %>%
 
 ### Reasoning adequacy
 
-For the 180 generations where GPT-3 correctly classified the sexist or racist text, we further examine the adequacy of the generated explanations. Table \@ref(tab:reasoningAdequacy) shows the count of the adequacy labels of the 180 evaluations. In 76 out of 180 times, the model's explanations contain false reasoning. In 60 cases, the model generates explanations with complete reasoning; in five cases, the model generates explanation with completed reasoning accompanied with overreaching reasoning. In 25 cases, the model produces explanations with insufficient reasoning; in 14 cases the model does not produce any explanation, or produces content that is not aimed at providing an explanation. 
+For the 180 generations where GPT-3 correctly classified the sexist or racist text, we further examine the adequacy of the generated explanations. Table \@ref(tab:reasoningAdequacy) shows the count of the adequacy labels of the 180 evaluations. In 76 out of 180 times, the model's explanations contain false reasoning. In 60 cases, the model generates explanations with complete reasoning. When the reasoning the model provides is insufficient, or partially false, the reasoning is considered partial. In 30 cases, the model produces explanations with partial reasoning. In 14 cases, the model does not produce any explanation, or produces content that is not aimed at providing an explanation. 
 
 ```{r reasoningAdequacy}
-open_ended_results_reason <- open_ended_results_raw %>%
-  filter(binary_match == 1) %>%
-  group_by(reasoning) %>%
-  mutate(count = n()) %>%
-  slice(1) %>%
-  select(reasoning, count)
+open_ended_results_raw <-
+  read.csv(here::here("output/data/open_ended_results_with_human_label.csv"))
 
-colnames(open_ended_results_reason) <-
-  c("Reasoning adequacy", "Count")
-open_ended_results_reason %>%
-  arrange(desc(Count)) %>%
+# Reasoning level counts form evaluator 1
+open_ended_results_reason_eval1 <- open_ended_results_raw %>%
+  mutate_all(.funs=toupper) %>%
+  filter(binary_match == 1) %>%
+  group_by(eval1_reasoning) %>%
+  mutate(eval1_count = n()) %>%
+  slice(1) %>%
+  select(eval1_reasoning, eval1_count)
+
+colnames(open_ended_results_reason_eval1) <-
+  c("Reasoning adequacy", "Count from evaluator 1")
+
+# Reasoning level counts form evaluator 2
+open_ended_results_reason_eval2 <- open_ended_results_raw %>%
+  mutate_all(.funs=toupper) %>%
+  filter(binary_match == 1) %>%
+  group_by(eval2_reasoning) %>%
+  mutate(eval2_count = n()) %>%
+  slice(1) %>%
+  select(eval2_reasoning, eval2_count)
+
+colnames(open_ended_results_reason_eval2) <-
+  c("Reasoning adequacy", "Count from evaluator 2")
+
+# Merge raults from eval1 and eval2
+open_ended_results_reason_eval1and2 <- merge(open_ended_results_reason_eval1, open_ended_results_reason_eval2, by = "Reasoning adequacy", sort = TRUE)
+open_ended_results_reason_eval1and2 %>%
   knitr::kable(caption = "Open-ended result reasoning level counts",
                booktabs = TRUE)
 ```
@@ -224,41 +243,78 @@ open_ended_results_reason %>%
 The 180 generations where GPT-3 successfully classified the sexist or racist text can be examined to see if the explanation provides an identification of who the target is and if the explanation is accompanied with false details. The results of target identification are displayed in Table \@ref(tab:openendedResultsTargetID). In 117 out of the 180 cases, the model provides an explanation along with the identification of the target (women, African Americans, ...). In some cases, the model generates explanations along with made-up, false, details such as assigning a false source to the given text. The number of cases where made-up details are found is shown in Table \@ref(tab:openendedResultsMadeupDetails). Nearly one-third of the time, the model generates made-up details in the explanations. 
 
 ```{r openendedResultsTargetID}
-open_ended_results_targetID <- open_ended_results_raw %>%
+
+# Target identification count from evaluator 1
+open_ended_results_targetID_eval1 <- open_ended_results_raw %>%
   filter(binary_match == 1) %>%
-  group_by(identify_target) %>%
+  group_by(eval1_identify_target) %>%
   mutate(count = n()) %>%
   slice(1) %>%
-  select(identify_target, count)
+  select(eval1_identify_target, count)
+open_ended_results_targetID_eval1 <- open_ended_results_targetID_eval1 %>%
+  mutate("Target identified" = ifelse(eval1_identify_target == 1, "Yes", "No"))
+open_ended_results_targetID_eval1 <-
+  open_ended_results_targetID_eval1[, c("Target identified", "count")]
+colnames(open_ended_results_targetID_eval1) <-
+  c("Target identified", "Count from evaluator 1")
 
-open_ended_results_targetID <- open_ended_results_targetID %>%
-  mutate("Target identified" = ifelse(identify_target == 1, "Yes", "No"))
-open_ended_results_targetID <-
-  open_ended_results_targetID[, c("Target identified", "count")]
+# Target identification count from evaluator 2
+open_ended_results_targetID_eval2 <- open_ended_results_raw %>%
+  filter(binary_match == 1) %>%
+  group_by(eval2_identify_target) %>%
+  mutate(count = n()) %>%
+  slice(1) %>%
+  select(eval2_identify_target, count)
+open_ended_results_targetID_eval2 <- open_ended_results_targetID_eval2 %>%
+  mutate("Target identified" = ifelse(eval2_identify_target == 1, "Yes", "No"))
+open_ended_results_targetID_eval2 <-
+  open_ended_results_targetID_eval2[, c("Target identified", "count")]
+colnames(open_ended_results_targetID_eval2) <-
+  c("Target identified", "Count from evaluator 2")
 
-colnames(open_ended_results_targetID) <-
-  c("Target identified", "Count")
-open_ended_results_targetID %>%
+# Merge raults from eval1 and eval2
+open_ended_results_targetID_eval1and2 <- merge(open_ended_results_targetID_eval1, open_ended_results_targetID_eval2, by = "Target identified", sort = TRUE)
+
+open_ended_results_targetID_eval1and2 %>%
   knitr::kable(caption = "Open-ended result target identification counts",
                booktabs = TRUE)
 ```
 
 ```{r openendedResultsMadeupDetails}
-open_ended_results_madeup_details <- open_ended_results_raw %>%
+# Made-up detail counts from evaluator 1
+open_ended_results_madeup_details_eval1 <- open_ended_results_raw %>%
   filter(binary_match == 1) %>%
-  group_by(madeup_details) %>%
+  group_by(eval1_madeup_details) %>%
   mutate(count = n()) %>%
   slice(1) %>%
-  select(madeup_details, count)
+  select(eval1_madeup_details, count)
 
-open_ended_results_madeup_details <- 
-  open_ended_results_madeup_details %>% 
-  mutate(madeup_details = ifelse(madeup_details == 1, "Yes", "No"))
+open_ended_results_madeup_details_eval1 <- 
+  open_ended_results_madeup_details_eval1 %>% 
+  mutate(eval1_madeup_details = ifelse(eval1_madeup_details == 1, "Yes", "No"))
 
-colnames(open_ended_results_madeup_details) <-
-  c("Made-up details", "Count")
+colnames(open_ended_results_madeup_details_eval1) <-
+  c("Made-up details", "Count from evaluator 1")
 
-open_ended_results_madeup_details %>%
+# Made-up detail counts from evaluator 2
+open_ended_results_madeup_details_eval2 <- open_ended_results_raw %>%
+  filter(binary_match == 1) %>%
+  group_by(eval2_madeup_details) %>%
+  mutate(count = n()) %>%
+  slice(1) %>%
+  select(eval2_madeup_details, count)
+
+open_ended_results_madeup_details_eval2 <- 
+  open_ended_results_madeup_details_eval2 %>% 
+  mutate(eval2_madeup_details = ifelse(eval2_madeup_details == 1, "Yes", "No"))
+
+colnames(open_ended_results_madeup_details_eval2) <-
+  c("Made-up details", "Count from evaluator 2")
+
+# Merge raults from eval1 and eval2
+open_ended_results_madeup_details_eval1and2 <- merge(open_ended_results_madeup_details_eval1, open_ended_results_madeup_details_eval2, by = "Made-up details", sort = TRUE)
+
+open_ended_results_madeup_details_eval1and2 %>%
   knitr::kable(caption = "Open-ended result made-up details counts",
                booktabs = TRUE)
 ```
@@ -267,66 +323,108 @@ open_ended_results_madeup_details %>%
 
 ```{r}
 structured_a8_t0_n30 <-
-  read.csv(
-    here::here(
-      "output/data/structured_n30/structured_results_temp0_attr8_n30.csv"
-    )
+  merge(
+    read.csv(here::here(
+      "output/data/structured_n30_eval1/structured_results_temp0_attr8_n30.csv"
+    )),
+    read.csv(here::here(
+      "output/data/structured_n30_eval2/structured_results_temp0_attr8_n30.csv"
+    )),
+    by = "comment"
   )
 structured_a8_t25_n30 <-
-  read.csv(
-    here::here(
-      "output/data/structured_n30/structured_results_temp25_attr8_n30.csv"
-    )
+  merge(
+    read.csv(here::here(
+      "output/data/structured_n30_eval1/structured_results_temp25_attr8_n30.csv"
+    )),
+    read.csv(here::here(
+      "output/data/structured_n30_eval2/structured_results_temp25_attr8_n30.csv"
+    )),
+    by = "comment"
   )
 structured_a8_t50_n30 <-
-  read.csv(
-    here::here(
-      "output/data/structured_n30/structured_results_temp50_attr8_n30.csv"
-    )
+  merge(
+    read.csv(here::here(
+      "output/data/structured_n30_eval1/structured_results_temp50_attr8_n30.csv"
+    )),
+    read.csv(here::here(
+      "output/data/structured_n30_eval2/structured_results_temp50_attr8_n30.csv"
+    )),
+    by = "comment"
   )
 structured_a8_t75_n30 <-
-  read.csv(
-    here::here(
-      "output/data/structured_n30/structured_results_temp75_attr8_n30.csv"
-    )
+  merge(
+    read.csv(here::here(
+      "output/data/structured_n30_eval1/structured_results_temp75_attr8_n30.csv"
+    )),
+    read.csv(here::here(
+      "output/data/structured_n30_eval2/structured_results_temp75_attr8_n30.csv"
+    )),
+    by = "comment"
   )
 structured_a8_t100_n30 <-
-  read.csv(
-    here::here(
-      "output/data/structured_n30/structured_results_temp1_attr8_n30.csv"
-    )
+  merge(
+    read.csv(here::here(
+      "output/data/structured_n30_eval1/structured_results_temp1_attr8_n30.csv"
+    )),
+    read.csv(here::here(
+      "output/data/structured_n30_eval2/structured_results_temp1_attr8_n30.csv"
+    )),
+    by = "comment"
   )
 structured_a6_t0_n30 <-
-  read.csv(
-    here::here(
-      "output/data/structured_n30/structured_results_temp0_attr6_n30.csv"
-    )
+  merge(
+    read.csv(here::here(
+      "output/data/structured_n30_eval1/structured_results_temp0_attr6_n30.csv"
+    )),
+    read.csv(here::here(
+      "output/data/structured_n30_eval2/structured_results_temp0_attr6_n30.csv"
+    )),
+    by = "comment"
   )
 structured_a6_t25_n30 <-
-  read.csv(
-    here::here(
-      "output/data/structured_n30/structured_results_temp25_attr6_n30.csv"
-    )
+  merge(
+    read.csv(here::here(
+      "output/data/structured_n30_eval1/structured_results_temp25_attr6_n30.csv"
+    )),
+    read.csv(here::here(
+      "output/data/structured_n30_eval2/structured_results_temp25_attr6_n30.csv"
+    )),
+    by = "comment"
   )
 structured_a6_t50_n30 <-
-  read.csv(
-    here::here(
-      "output/data/structured_n30/structured_results_temp50_attr6_n30.csv"
-    )
+  merge(
+    read.csv(here::here(
+      "output/data/structured_n30_eval1/structured_results_temp50_attr6_n30.csv"
+    )),
+    read.csv(here::here(
+      "output/data/structured_n30_eval2/structured_results_temp50_attr6_n30.csv"
+    )),
+    by = "comment"
   )
 structured_a6_t75_n30 <-
-  read.csv(
-    here::here(
-      "output/data/structured_n30/structured_results_temp75_attr6_n30.csv"
-    )
+  merge(
+    read.csv(here::here(
+      "output/data/structured_n30_eval1/structured_results_temp75_attr6_n30.csv"
+    )),
+    read.csv(here::here(
+      "output/data/structured_n30_eval2/structured_results_temp75_attr6_n30.csv"
+    )),
+    by = "comment"
   )
 structured_a6_t100_n30 <-
-  read.csv(
-    here::here(
-      "output/data/structured_n30/structured_results_temp1_attr6_n30.csv"
-    )
+  merge(
+    read.csv(here::here(
+      "output/data/structured_n30_eval1/structured_results_temp1_attr6_n30.csv"
+    )),
+    read.csv(here::here(
+      "output/data/structured_n30_eval2/structured_results_temp1_attr6_n30.csv"
+    )),
+    by = "comment"
   )
 
+```
+```{r}
 count_mismatch <- function(df, column_to_count, column_prefix) {
   new_df <- df %>%
     filter(gender >= 0.75 | race >= 0.75) %>%
@@ -336,340 +434,90 @@ count_mismatch <- function(df, column_to_count, column_prefix) {
     rename(!!column_prefix := "mean(n)")
   new_df
 }
+count_mismatch_temps <- function(column_to_count, attribute) {
+  a8_t0 <-
+    count_mismatch(structured_a8_t0_n30, column_to_count, "Temperature 0")
+  a8_t25 <-
+    count_mismatch(structured_a8_t25_n30, column_to_count, "Temperature 25")
+  a8_t50 <-
+    count_mismatch(structured_a8_t50_n30, column_to_count, "Temperature 50")
+  a8_t75 <-
+    count_mismatch(structured_a8_t75_n30, column_to_count, "Temperature 75")
+  a8_t100 <-
+    count_mismatch(structured_a8_t100_n30, column_to_count, "Temperature 100")
+  mismatch_summary <-
+    add_column(
+      Attribute = attribute,
+      a8_t0,
+      a8_t25,
+      a8_t50,
+      a8_t75,
+      a8_t100
+    )
+  mismatch_summary <-
+    mismatch_summary[, c(
+      "Attribute",
+      "Temperature 0",
+      "Temperature 25",
+      "Temperature 50",
+      "Temperature 75",
+      "Temperature 100"
+    )]
+  colnames(mismatch_summary) <-
+    c(
+      "Attribute",
+      "Temperature 0",
+      "Temperature 0.25",
+      "Temperature 0.5",
+      "Temperature 0.75",
+      "Temperature 1"
+    )
+  mismatch_summary
+}
 ```
+
 
 ```{r mismatchSummary}
 ### Target
-target_a8_t0 <-
-  count_mismatch(structured_a8_t0_n30, "matched_target", "Temperature 0")
-target_a8_t25 <-
-  count_mismatch(structured_a8_t25_n30, "matched_target", "Temperature 25")
-target_a8_t50 <-
-  count_mismatch(structured_a8_t50_n30, "matched_target", "Temperature 50")
-target_a8_t75 <-
-  count_mismatch(structured_a8_t75_n30, "matched_target", "Temperature 75")
-target_a8_t100 <-
-  count_mismatch(structured_a8_t100_n30, "matched_target", "Temperature 100")
-target_mismatch_summary <-
-  add_column(
-    Attribute = "Target",
-    target_a8_t0,
-    target_a8_t25,
-    target_a8_t50,
-    target_a8_t75,
-    target_a8_t100
-  )
-target_mismatch_summary <-
-  target_mismatch_summary[, c(
-    "Attribute",
-    "Temperature 0",
-    "Temperature 25",
-    "Temperature 50",
-    "Temperature 75",
-    "Temperature 100"
-  )]
-colnames(target_mismatch_summary) <-
-  c(
-    "Attribute",
-    "Temperature 0",
-    "Temperature 0.25",
-    "Temperature 0.5",
-    "Temperature 0.75",
-    "Temperature 1"
-  )
+target_mismatch_summary <- 
+  rbind(count_mismatch_temps("eval1_matched_target", "Target (eval1)"),
+        count_mismatch_temps("eval2_matched_target", "Target (eval2)"))
 
 ### Targeting Type
-targetingtype_a8_t0 <-
-  count_mismatch(structured_a8_t0_n30,
-                 "matched_targeting_type",
-                 "Temperature 0")
-targetingtype_a8_t25 <-
-  count_mismatch(structured_a8_t25_n30,
-                 "matched_targeting_type",
-                 "Temperature 25")
-targetingtype_a8_t50 <-
-  count_mismatch(structured_a8_t50_n30,
-                 "matched_targeting_type",
-                 "Temperature 50")
-targetingtype_a8_t75 <-
-  count_mismatch(structured_a8_t75_n30,
-                 "matched_targeting_type",
-                 "Temperature 75")
-targetingtype_a8_t100 <-
-  count_mismatch(structured_a8_t100_n30,
-                 "matched_targeting_type",
-                 "Temperature 100")
-targetingtype_mismatch_summary <-
-  add_column(
-    Attribute = "Targeting Type",
-    targetingtype_a8_t0,
-    targetingtype_a8_t25,
-    targetingtype_a8_t50,
-    targetingtype_a8_t75,
-    targetingtype_a8_t100
-  )
-targetingtype_mismatch_summary <-
-  targetingtype_mismatch_summary[, c(
-    "Attribute",
-    "Temperature 0",
-    "Temperature 25",
-    "Temperature 50",
-    "Temperature 75",
-    "Temperature 100"
-  )]
-colnames(targetingtype_mismatch_summary) <-
-  c(
-    "Attribute",
-    "Temperature 0",
-    "Temperature 0.25",
-    "Temperature 0.5",
-    "Temperature 0.75",
-    "Temperature 1"
-  )
+targetingtype_mismatch_summary <- 
+  rbind(count_mismatch_temps("eval1_matched_targeting_type", "Targeting Type (eval1)"),
+        count_mismatch_temps("eval2_matched_targeting_type", "Targeting Type (eval2)")
+        )
 
 ### Violence
-violence_a8_t0 <-
-  count_mismatch(structured_a8_t0_n30, "matched_violence", "Temperature 0")
-violence_a8_t25 <-
-  count_mismatch(structured_a8_t25_n30, "matched_violence", "Temperature 25")
-violence_a8_t50 <-
-  count_mismatch(structured_a8_t50_n30, "matched_violence", "Temperature 50")
-violence_a8_t75 <-
-  count_mismatch(structured_a8_t75_n30, "matched_violence", "Temperature 75")
-violence_a8_t100 <-
-  count_mismatch(structured_a8_t100_n30, "matched_violence", "Temperature 100")
-violence_mismatch_summary <-
-  add_column(
-    Attribute = "Violence",
-    violence_a8_t0,
-    violence_a8_t25,
-    violence_a8_t50,
-    violence_a8_t75,
-    violence_a8_t100
-  )
-violence_mismatch_summary <-
-  violence_mismatch_summary[, c(
-    "Attribute",
-    "Temperature 0",
-    "Temperature 25",
-    "Temperature 50",
-    "Temperature 75",
-    "Temperature 100"
-  )]
-colnames(violence_mismatch_summary) <-
-  c(
-    "Attribute",
-    "Temperature 0",
-    "Temperature 0.25",
-    "Temperature 0.5",
-    "Temperature 0.75",
-    "Temperature 1"
-  )
+violence_mismatch_summary <- 
+  rbind(count_mismatch_temps("eval1_matched_violence", "Violence (eval1)"),
+        count_mismatch_temps("eval2_matched_violence", "Violence (eval2)"))
 
 ### Derogatory
-derogatory_a8_t0 <-
-  count_mismatch(structured_a8_t0_n30, "matched_derogatory", "Temperature 0")
-derogatory_a8_t25 <-
-  count_mismatch(structured_a8_t25_n30, "matched_derogatory", "Temperature 25")
-derogatory_a8_t50 <-
-  count_mismatch(structured_a8_t50_n30, "matched_derogatory", "Temperature 50")
-derogatory_a8_t75 <-
-  count_mismatch(structured_a8_t75_n30, "matched_derogatory", "Temperature 75")
-derogatory_a8_t100 <-
-  count_mismatch(structured_a8_t100_n30,
-                 "matched_derogatory",
-                 "Temperature 100")
-derogatory_mismatch_summary <-
-  add_column(
-    Attribute = "Derogatory",
-    derogatory_a8_t0,
-    derogatory_a8_t25,
-    derogatory_a8_t50,
-    derogatory_a8_t75,
-    derogatory_a8_t100
-  )
-derogatory_mismatch_summary <-
-  derogatory_mismatch_summary[, c(
-    "Attribute",
-    "Temperature 0",
-    "Temperature 25",
-    "Temperature 50",
-    "Temperature 75",
-    "Temperature 100"
-  )]
-colnames(derogatory_mismatch_summary) <-
-  c(
-    "Attribute",
-    "Temperature 0",
-    "Temperature 0.25",
-    "Temperature 0.5",
-    "Temperature 0.75",
-    "Temperature 1"
-  )
+derogatory_mismatch_summary <- 
+  rbind(count_mismatch_temps("eval1_matched_derogatory", "Derogatory (eval1)"),
+        count_mismatch_temps("eval2_matched_derogatory", "Derogatory (eval2)"))
 
 ### Profanity
-profanity_a8_t0 <-
-  count_mismatch(structured_a8_t0_n30, "matched_profanity", "Temperature 0")
-profanity_a8_t25 <-
-  count_mismatch(structured_a8_t25_n30, "matched_profanity", "Temperature 25")
-profanity_a8_t50 <-
-  count_mismatch(structured_a8_t50_n30, "matched_profanity", "Temperature 50")
-profanity_a8_t75 <-
-  count_mismatch(structured_a8_t75_n30, "matched_profanity", "Temperature 75")
-profanity_a8_t100 <-
-  count_mismatch(structured_a8_t100_n30,
-                 "matched_profanity",
-                 "Temperature 100")
-profanity_mismatch_summary <-
-  add_column(
-    Attribute = "Profanity",
-    profanity_a8_t0,
-    profanity_a8_t25,
-    profanity_a8_t50,
-    profanity_a8_t75,
-    profanity_a8_t100
-  )
-profanity_mismatch_summary <-
-  profanity_mismatch_summary[, c(
-    "Attribute",
-    "Temperature 0",
-    "Temperature 25",
-    "Temperature 50",
-    "Temperature 75",
-    "Temperature 100"
-  )]
-colnames(profanity_mismatch_summary) <-
-  c(
-    "Attribute",
-    "Temperature 0",
-    "Temperature 0.25",
-    "Temperature 0.5",
-    "Temperature 0.75",
-    "Temperature 1"
-  )
+profanity_mismatch_summary <- 
+  rbind(count_mismatch_temps("eval1_matched_profanity", "Profanity (eval1)"),
+        count_mismatch_temps("eval2_matched_profanity", "Profanity (eval2)"))
 
 ### Obscenity
-obscenity_a8_t0 <-
-  count_mismatch(structured_a8_t0_n30, "matched_obscenity", "Temperature 0")
-obscenity_a8_t25 <-
-  count_mismatch(structured_a8_t25_n30, "matched_obscenity", "Temperature 25")
-obscenity_a8_t50 <-
-  count_mismatch(structured_a8_t50_n30, "matched_obscenity", "Temperature 50")
-obscenity_a8_t75 <-
-  count_mismatch(structured_a8_t75_n30, "matched_obscenity", "Temperature 75")
-obscenity_a8_t100 <-
-  count_mismatch(structured_a8_t100_n30,
-                 "matched_obscenity",
-                 "Temperature 100")
-obscenity_mismatch_summary <-
-  add_column(
-    Attribute = "Obscenity",
-    obscenity_a8_t0,
-    obscenity_a8_t25,
-    obscenity_a8_t50,
-    obscenity_a8_t75,
-    obscenity_a8_t100
-  )
-obscenity_mismatch_summary <-
-  obscenity_mismatch_summary[, c(
-    "Attribute",
-    "Temperature 0",
-    "Temperature 25",
-    "Temperature 50",
-    "Temperature 75",
-    "Temperature 100"
-  )]
-colnames(obscenity_mismatch_summary) <-
-  c(
-    "Attribute",
-    "Temperature 0",
-    "Temperature 0.25",
-    "Temperature 0.5",
-    "Temperature 0.75",
-    "Temperature 1"
-  )
+obscenity_mismatch_summary <- 
+  rbind(count_mismatch_temps("eval1_matched_obscenity", "Obscenity (eval1)"),
+        count_mismatch_temps("eval2_matched_obscenity", "Obscenity (eval2)"))
 
 ### Rejection
-rejection_a8_t0 <-
-  count_mismatch(structured_a8_t0_n30, "matched_rejection", "Temperature 0")
-rejection_a8_t25 <-
-  count_mismatch(structured_a8_t25_n30, "matched_rejection", "Temperature 25")
-rejection_a8_t50 <-
-  count_mismatch(structured_a8_t50_n30, "matched_rejection", "Temperature 50")
-rejection_a8_t75 <-
-  count_mismatch(structured_a8_t75_n30, "matched_rejection", "Temperature 75")
-rejection_a8_t100 <-
-  count_mismatch(structured_a8_t100_n30,
-                 "matched_rejection",
-                 "Temperature 100")
-rejection_mismatch_summary <-
-  add_column(
-    Attribute = "Rejection",
-    rejection_a8_t0,
-    rejection_a8_t25,
-    rejection_a8_t50,
-    rejection_a8_t75,
-    rejection_a8_t100
-  )
-rejection_mismatch_summary <-
-  rejection_mismatch_summary[, c(
-    "Attribute",
-    "Temperature 0",
-    "Temperature 25",
-    "Temperature 50",
-    "Temperature 75",
-    "Temperature 100"
-  )]
-colnames(rejection_mismatch_summary) <-
-  c(
-    "Attribute",
-    "Temperature 0",
-    "Temperature 0.25",
-    "Temperature 0.5",
-    "Temperature 0.75",
-    "Temperature 1"
-  )
+rejection_mismatch_summary <- 
+  rbind(count_mismatch_temps("eval1_matched_rejection", "Rejection (eval1)"),
+        count_mismatch_temps("eval2_matched_rejection", "Rejection (eval2)"))
 
 ### Accusation
-accusation_a8_t0 <-
-  count_mismatch(structured_a8_t0_n30, "matched_accusation", "Temperature 0")
-accusation_a8_t25 <-
-  count_mismatch(structured_a8_t25_n30, "matched_accusation", "Temperature 25")
-accusation_a8_t50 <-
-  count_mismatch(structured_a8_t50_n30, "matched_accusation", "Temperature 50")
-accusation_a8_t75 <-
-  count_mismatch(structured_a8_t75_n30, "matched_accusation", "Temperature 75")
-accusation_a8_t100 <-
-  count_mismatch(structured_a8_t100_n30,
-                 "matched_accusation",
-                 "Temperature 100")
-accusation_mismatch_summary <-
-  add_column(
-    Attribute = "Accusation",
-    accusation_a8_t0,
-    accusation_a8_t25,
-    accusation_a8_t50,
-    accusation_a8_t75,
-    accusation_a8_t100
-  )
-accusation_mismatch_summary <-
-  accusation_mismatch_summary[, c(
-    "Attribute",
-    "Temperature 0",
-    "Temperature 25",
-    "Temperature 50",
-    "Temperature 75",
-    "Temperature 100"
-  )]
-colnames(accusation_mismatch_summary) <-
-  c(
-    "Attribute",
-    "Temperature 0",
-    "Temperature 0.25",
-    "Temperature 0.5",
-    "Temperature 0.75",
-    "Temperature 1"
-  )
+accusation_mismatch_summary <- 
+  rbind(count_mismatch_temps("eval1_matched_accusation", "Accusation (eval1)"),
+        count_mismatch_temps("eval2_matched_accusation", "Accusation (eval2)"))
 ```
 
 ```{r}
@@ -678,11 +526,12 @@ merge_df_30n <- function(df, temp) {
     filter(gender >= 0.75 | race >= 0.75) %>%
     group_by(index) %>%
     summarise_if(is.numeric, sum, na.rm = TRUE)  %>%
-    select(index, starts_with("matched")) %>%
+    select(index, starts_with("eval")) %>%
     mutate(temperature = temp)
   new_df
 }
-structured_a8_t0_n30_list <- merge_df_30n(structured_a8_t0_n30, 0)
+structured_a8_t0_n30_list <- 
+  merge_df_30n(structured_a8_t0_n30, 0)
 structured_a8_t25_n30_list <-
   merge_df_30n(structured_a8_t25_n30, 0.25)
 structured_a8_t50_n30_list <-
@@ -723,9 +572,9 @@ structured_a6_n30_list <-
 
 Figure \ref{fig:avgmatches} shows the structured result average number of attribute matches for temperature values of: 0, 0.25, 0.5, 0.75, and 1. We observe a general trend that the number of matches decreases as the temperature increases. Except for _target_, _profanity_ and _obscenity_ where the model performs the best under temperature 0.25 by a small margin, the results of temperature 0 have the highest number of matches with the human evaluation in every other attribute. The model consistently performs poorly with temperature value of 1. Moreover, the distribution of the matched number of statements has a wider range at higher temperatures.
 
-```{r avgmatches, fig.height=7, fig.cap="Average number of matched attributes in temperature 0, 0.25, 0.5, 0.75 and 1 (note the differing y-axes)"}
+```{r avgmatches_eval1, fig.height=7, fig.cap="Average number of matched attributes in temperature 0, 0.25, 0.5, 0.75 and 1 (note the differing y-axes) from evaluator 1"}
 p1 <-
-  ggplot(structured_a8_n30_list, aes(factor(temperature), matched_target)) +
+  ggplot(structured_a8_n30_list, aes(factor(temperature), eval1_matched_target)) +
   geom_boxplot() +
   geom_jitter(width = 0.25, height = 0, alpha = 0.2) +
   labs(x = "Temperature",
@@ -733,7 +582,7 @@ p1 <-
   theme_classic()
 
 p2 <-
-  ggplot(structured_a8_n30_list, aes(factor(temperature), matched_targeting_type)) +
+  ggplot(structured_a8_n30_list, aes(factor(temperature), eval1_matched_targeting_type)) +
   geom_boxplot() +
   geom_jitter(width = 0.25, height = 0, alpha = 0.2) +
   labs(x = "Temperature",
@@ -741,7 +590,7 @@ p2 <-
   theme_classic()
 
 p3 <-
-  ggplot(structured_a8_n30_list, aes(factor(temperature), matched_violence)) +
+  ggplot(structured_a8_n30_list, aes(factor(temperature), eval1_matched_violence)) +
   geom_boxplot() +
   geom_jitter(width = 0.25, height = 0, alpha = 0.2) +
   labs(x = "Temperature",
@@ -749,7 +598,7 @@ p3 <-
   theme_classic()
 
 p4 <-
-  ggplot(structured_a8_n30_list, aes(factor(temperature), matched_derogatory)) +
+  ggplot(structured_a8_n30_list, aes(factor(temperature), eval1_matched_derogatory)) +
   geom_boxplot() +
   geom_jitter(width = 0.25, height = 0, alpha = 0.2) +
   labs(x = "Temperature",
@@ -757,7 +606,7 @@ p4 <-
   theme_classic()
 
 p5 <-
-  ggplot(structured_a8_n30_list, aes(factor(temperature), matched_profanity)) +
+  ggplot(structured_a8_n30_list, aes(factor(temperature), eval1_matched_profanity)) +
   geom_boxplot() +
   geom_jitter(width = 0.25, height = 0, alpha = 0.2) +
   labs(x = "Temperature",
@@ -765,7 +614,7 @@ p5 <-
   theme_classic()
 
 p6 <-
-  ggplot(structured_a8_n30_list, aes(factor(temperature), matched_obscenity)) +
+  ggplot(structured_a8_n30_list, aes(factor(temperature), eval1_matched_obscenity)) +
   geom_boxplot() +
   geom_jitter(width = 0.25, height = 0, alpha = 0.2) +
   labs(x = "Temperature",
@@ -773,7 +622,7 @@ p6 <-
   theme_classic()
 
 p7 <-
-  ggplot(structured_a8_n30_list, aes(factor(temperature), matched_rejection)) +
+  ggplot(structured_a8_n30_list, aes(factor(temperature), eval1_matched_rejection)) +
   geom_boxplot() +
   geom_jitter(width = 0.25, height = 0, alpha = 0.2) +
   labs(x = "Temperature",
@@ -781,7 +630,7 @@ p7 <-
   theme_classic()
 
 p8 <-
-  ggplot(structured_a8_n30_list, aes(factor(temperature), matched_accusation)) +
+  ggplot(structured_a8_n30_list, aes(factor(temperature), eval1_matched_accusation)) +
   geom_boxplot() +
   geom_jitter(width = 0.25, height = 0, alpha = 0.2) +
   labs(x = "Temperature",
@@ -798,9 +647,89 @@ gridExtra::grid.arrange(
   p7,
   p8,
   ncol = 2,
-  top = grid::textGrob("Average number of matched attributes in different temperatures")
+  top = grid::textGrob("Average number of matched attributes in different temperatures from evaluator 1")
 )
 ```
+
+```{r avgmatches_eval2, fig.height=7, fig.cap="Average number of matched attributes in temperature 0, 0.25, 0.5, 0.75 and 1 (note the differing y-axes) from evaluator 2"}
+p1 <-
+  ggplot(structured_a8_n30_list, aes(factor(temperature), eval2_matched_target)) +
+  geom_boxplot() +
+  geom_jitter(width = 0.25, height = 0, alpha = 0.2) +
+  labs(x = "Temperature",
+       y = "Target") +
+  theme_classic()
+
+p2 <-
+  ggplot(structured_a8_n30_list, aes(factor(temperature), eval2_matched_targeting_type)) +
+  geom_boxplot() +
+  geom_jitter(width = 0.25, height = 0, alpha = 0.2) +
+  labs(x = "Temperature",
+       y = "Type") +
+  theme_classic()
+
+p3 <-
+  ggplot(structured_a8_n30_list, aes(factor(temperature), eval2_matched_violence)) +
+  geom_boxplot() +
+  geom_jitter(width = 0.25, height = 0, alpha = 0.2) +
+  labs(x = "Temperature",
+       y = "Violence") +
+  theme_classic()
+
+p4 <-
+  ggplot(structured_a8_n30_list, aes(factor(temperature), eval2_matched_derogatory)) +
+  geom_boxplot() +
+  geom_jitter(width = 0.25, height = 0, alpha = 0.2) +
+  labs(x = "Temperature",
+       y = "Derogatory") +
+  theme_classic()
+
+p5 <-
+  ggplot(structured_a8_n30_list, aes(factor(temperature), eval2_matched_profanity)) +
+  geom_boxplot() +
+  geom_jitter(width = 0.25, height = 0, alpha = 0.2) +
+  labs(x = "Temperature",
+       y = "Profanity") +
+  theme_classic()
+
+p6 <-
+  ggplot(structured_a8_n30_list, aes(factor(temperature), eval2_matched_obscenity)) +
+  geom_boxplot() +
+  geom_jitter(width = 0.25, height = 0, alpha = 0.2) +
+  labs(x = "Temperature",
+       y = "Obscenity") +
+  theme_classic()
+
+p7 <-
+  ggplot(structured_a8_n30_list, aes(factor(temperature), eval2_matched_rejection)) +
+  geom_boxplot() +
+  geom_jitter(width = 0.25, height = 0, alpha = 0.2) +
+  labs(x = "Temperature",
+       y = "Rejection") +
+  theme_classic()
+
+p8 <-
+  ggplot(structured_a8_n30_list, aes(factor(temperature), eval2_matched_accusation)) +
+  geom_boxplot() +
+  geom_jitter(width = 0.25, height = 0, alpha = 0.2) +
+  labs(x = "Temperature",
+       y = "Accusation") +
+  theme_classic()
+
+gridExtra::grid.arrange(
+  p1,
+  p2,
+  p3,
+  p4,
+  p5,
+  p6,
+  p7,
+  p8,
+  ncol = 2,
+  top = grid::textGrob("Average number of matched attributes in different temperatures from evaluator 2")
+)
+```
+
 
 ### Comparison of all attributes
 
@@ -837,15 +766,15 @@ summary(all_attr_summary_t) %>%
 The general attribute insult encompasses derogatory, profanity, and obscenity, which are granular attributes. We examine how GPT-3 performs in identifying a more general attribute compared to identifying more granular attributes. Figure \ref{fig:insultMismatchSummaryLineChart} shows the average numbers of matches in _insult_, _derogatory_, _profanity_, and _obscenity_ with temperature values of: 0, 0.25, 0.5, 0.75 and 1. The results show that the model tends to perform better at identifying general attributes compared to granular attributes. 
 
 
-```{r insultMismatchSummaryLineChart, fig.height=3, fig.cap="Average number of matches in insult, derogatory, profanity, and obscenity under temperature 0, 0.25, 0.5, 0.75 and 1"}
+```{r insultMismatchSummaryLineChartEval1, fig.height=3, fig.cap="Average number of matches in insult, derogatory, profanity, and obscenity under temperature 0, 0.25, 0.5, 0.75 and 1 from evaluator 1"}
 insult_df <-
   add_column(
     structured_a6_n30_list["index"],
     structured_a6_n30_list["temperature"],
-    structured_a6_n30_list["matched_insult"],
-    structured_a8_n30_list["matched_derogatory"],
-    structured_a8_n30_list["matched_profanity"],
-    structured_a8_n30_list["matched_obscenity"]
+    structured_a6_n30_list["eval1_matched_insult"],
+    structured_a8_n30_list["eval1_matched_derogatory"],
+    structured_a8_n30_list["eval1_matched_profanity"],
+    structured_a8_n30_list["eval1_matched_obscenity"]
   )
 
 insult_df <-
@@ -859,47 +788,73 @@ insult_df <-
   mutate(matched_attribute = fct_relevel(
     matched_attribute,
     c(
-      "matched_insult",
-      "matched_derogatory",
-      "matched_profanity",
-      "matched_obscenity"
+      "eval1_matched_insult",
+      "eval1_matched_derogatory",
+      "eval1_matched_profanity",
+      "eval1_matched_obscenity"
     )
   ))  %>%
-  mutate(general = ifelse(matched_attribute == "matched_insult", "1", "0")) %>%
-  mutate(matched_attribute = str_replace(matched_attribute, "matched_insult", "Matched Insult")) %>%
-  mutate(matched_attribute = str_replace(matched_attribute, "matched_derogatory", "Matched Derogatory")) %>%
-  mutate(matched_attribute = str_replace(matched_attribute, "matched_profanity", "Matched Profanity")) %>%
-  mutate(matched_attribute = str_replace(matched_attribute, "matched_obscenity", "Matched Obscenity"))
-
-# insult_df <-
-#   insult_df %>%
-#   mutate(matched_attribute = ifelse(matched_attribute == 'matched_insult',
-#                                     "Insult",
-#                                     matched_attribute,
-#                                     matched_attribute == 'matched_derogatory',
-#                                     "Derogatory",
-#                                     matched_attribute,
-#                                     matched_attribute == 'matched_profanity',
-#                                     "Profanity",
-#                                     matched_attribute,
-#                                     matched_attribute == 'matched_obscenity',
-#                                     "Obscenity",
-#                                     matched_attribute,
-#                                     ))
-
-
+  mutate(general = ifelse(matched_attribute == "eval1_matched_insult", "1", "0")) %>%
+  mutate(matched_attribute = str_replace(matched_attribute, "eval1_matched_insult", "Matched Insult")) %>%
+  mutate(matched_attribute = str_replace(matched_attribute, "eval1_matched_derogatory", "Matched Derogatory")) %>%
+  mutate(matched_attribute = str_replace(matched_attribute, "eval1_matched_profanity", "Matched Profanity")) %>%
+  mutate(matched_attribute = str_replace(matched_attribute, "eval1_matched_obscenity", "Matched Obscenity"))
 
 ggplot(data = insult_df, aes(x = temperature, y = count, group = matched_attribute)) +
   geom_line(aes(color = matched_attribute)) +
   geom_point() +
   labs(
-    title = "Average number of matches in insult, derogatory, profanity, and obscenity",
+    title = "Average number of matches in insult, derogatory, profanity, and obscenity from evaluator 1",
     y = "Number",
     x = "Temperature",
     color = "Attribute"
   ) +
   theme_classic()
+```
+```{r insultMismatchSummaryLineChartEval2, fig.height=3, fig.cap="Average number of matches in insult, derogatory, profanity, and obscenity under temperature 0, 0.25, 0.5, 0.75 and 1 from evaluator 2"}
+insult_df <-
+  add_column(
+    structured_a6_n30_list["index"],
+    structured_a6_n30_list["temperature"],
+    structured_a6_n30_list["eval2_matched_insult"],
+    structured_a8_n30_list["eval2_matched_derogatory"],
+    structured_a8_n30_list["eval2_matched_profanity"],
+    structured_a8_n30_list["eval2_matched_obscenity"]
+  )
 
+insult_df <-
+  insult_df %>%
+  group_by(index, temperature) %>%
+  summarise_if(is.numeric, sum, na.rm = TRUE) %>%
+  group_by(temperature) %>%
+  select(-index) %>%
+  summarise_if(is.numeric, mean, na.rm = TRUE) %>%
+  pivot_longer(!temperature, names_to = "matched_attribute", values_to = "count") %>%
+  mutate(matched_attribute = fct_relevel(
+    matched_attribute,
+    c(
+      "eval2_matched_insult",
+      "eval2_matched_derogatory",
+      "eval2_matched_profanity",
+      "eval2_matched_obscenity"
+    )
+  ))  %>%
+  mutate(general = ifelse(matched_attribute == "eval2_matched_insult", "1", "0")) %>%
+  mutate(matched_attribute = str_replace(matched_attribute, "eval2_matched_insult", "Matched Insult")) %>%
+  mutate(matched_attribute = str_replace(matched_attribute, "eval2_matched_derogatory", "Matched Derogatory")) %>%
+  mutate(matched_attribute = str_replace(matched_attribute, "eval2_matched_profanity", "Matched Profanity")) %>%
+  mutate(matched_attribute = str_replace(matched_attribute, "eval2_matched_obscenity", "Matched Obscenity"))
+
+ggplot(data = insult_df, aes(x = temperature, y = count, group = matched_attribute)) +
+  geom_line(aes(color = matched_attribute)) +
+  geom_point() +
+  labs(
+    title = "Average number of matches in insult, derogatory, profanity, and obscenity from evaluator 2",
+    y = "Number",
+    x = "Temperature",
+    color = "Attribute"
+  ) +
+  theme_classic()
 ```
 
 # Discussion
@@ -928,7 +883,7 @@ In some cases, the model does not clearly state if a given statement is sexist o
 
 > It depends on your definition of sexism. If you think that the statement is attributing an inferiority to women that does not exist and is just a result of sexist bias, then the statement is sexist. If you do not think this statement is sexist then you would answer no.
 
-At other times, GPT-3 successfully identified sexist or racist content with a clear 'yes' or 'it is sexist/racist', but then the explanations that followed are false or insufficient. In the following example, the model wrongly attributes the racist element to the use of 'you', and overlooks the offensive language that is directly attacking a target based on their race:
+At other times, GPT-3 successfully identified sexist or racist content with a clear 'yes' or 'it is sexist/racist', but then the explanations that followed are false, partially false, or insufficient. In the following example, the model wrongly attributes the racist element to the use of 'you', and overlooks the offensive language that is directly attacking a target based on their race:
 
 > Prompt:
 
@@ -976,7 +931,7 @@ In the above example, GPT-3 successfully identified the target as a Muslim, and 
 
 ## Conclusion, weaknesses and next steps
 
-In our study, we have found GPT-3 can generate coherent and meaningful explanations for why a given statement is sexist or racist in an open-ended manner. However, the reasoning is often false or insufficient, and sometimes accompanied by made-up details. 
+In our study, we have found GPT-3 can generate coherent and meaningful explanations for why a given statement is sexist or racist in an open-ended manner. However, the reasoning is often false or only partial, and sometimes accompanied by made-up details. 
 
 One particular issue with the human evaluation stage of the GPT-3 output is that there was just one evaluator. It is possible that this evaluator is biased in certain ways, and adding multiple evaluators would go part-way to addressing these concerns.
 
